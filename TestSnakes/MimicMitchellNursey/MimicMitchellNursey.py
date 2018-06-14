@@ -18,13 +18,13 @@ PATH_FINDING_OBSTACLES = [WALL, SNAKE, DANGER, SNAKE_HEAD, SNAKE_TAIL]
 GOOD_POSITIONS = [EMPTY, FOOD]
 DEATH_POSITIONS = [WALL, SNAKE, SNAKE_HEAD]
 GOAL_POSITIONS = [FOOD]
-MOVE_LOG_FOLDER = "moveDatabase"
 taunt = 'Make money sell money'
 
 
 class MimicMitchellNursey():
 
-    def __init__(self, gn):
+    def __init__(self, gn, moveLogFolder="moveDatabase"):
+        self.moveLogFolder = moveLogFolder
         self.gameNumber = gn
         self.moveNumber = 0
         
@@ -964,11 +964,10 @@ class MimicMitchellNursey():
         
         data2["choice"] = output
     
-        fileName = MOVE_LOG_FOLDER + "/" + str(self.gameNumber) + "_" + str(self.moveNumber)
-        
+        fileName = self.moveLogFolder + "/" + str(self.gameNumber) + "_" + str(self.moveNumber)
         with open(fileName, "w") as f:
             f.write(json.dumps(data2))
-        
+
         self.moveNumber += 1
         return {
             'move': output,
