@@ -6,6 +6,7 @@ GetTrainingData gets the JSON input/output data from games played
 import argparse
 import os
 import sys
+import time
 from BattleSnake import *
 
 
@@ -34,22 +35,26 @@ def setup_game(gameNumber, outputFolder, width=20, height=20, food=20):
     return s
 
 
-# Starts the game with the speed and careless parameters
+# Starts the game to run as fast as possible, without throwing errors and with 
+# output piped to /dev/null
 def start_single_game(game):
     try:
-        game.start_game(speed=100, outputBoard=False, debug=False)
+        with open(os.devnull, 'w') as devnull:
+            sys.stdout = devnull
+            game.start_game(speed=100, outputBoard=False, debug=False)
+        sys.stdout = sys.__stdout__
     except:
-        pass
+        sys.stdout = sys.__stdout__
 
 
 # Starts the loop to run all the games
 def start_games(args):
+    t = time.time()
     for gameNumber in range(args.games):
-        print("Game Number: {0}, Completed: {1}%".format(gameNumber, gameNumber/args.games),
-              end="\r")
+        print("Game Number: {0} | Completed: {1:.2f}% | Time Elapsed: {2:.0f}s".format(gameNumber,
+              gameNumber*100/args.games, time.time()-t), end="\r")
         game = setup_game(gameNumber, args.output, args.width, args.height, args.food)
         start_single_game(game)
-
 
 # The main function of execution
 def main():
