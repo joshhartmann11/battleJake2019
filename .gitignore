@@ -1,19 +1,6 @@
-Information/
-TestSnakes/.DS_Store
-TestSnakes/BattleJake2018/
-TestSnakes/BattleJake2019/.DS_Store
-TestSnakes/BattleJake2019/NeuralNetStuff/.DS_Store
-TestSnakes/BattleJake2019/NeuralNetStuff/Testing.py
-TestSnakes/BattleJake2019/NeuralNetStuff/__init__.py
-TestSnakes/BattleJake2019/NeuralNetStuff/__pycache__/
-TestSnakes/BattleJake2019/NeuralNetStuff/networks/
-TestSnakes/MimicMitchellNursey/.DS_Store
-TestSnakes/MimicMitchellNursey/__init__.py
-TestSnakes/MitchellNursey/.DS_Store
-TestSnakes/MitchellNursey/__init__.py
-TestSnakes/SajanDinsa/.DS_Store	
-TestSnakes/SajanDinsa/__init__.py
+Information
 TestSnakes/SimpleJake/.DS_Store
-TestSnakes/SimpleJake/__init__.py
-TestSnakes/SajanDinsa/.DS_Store
+__init__.py
+.DS_Store
+__pycache__
 
