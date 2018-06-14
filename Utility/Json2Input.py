@@ -1,19 +1,35 @@
+"""
+Converts JSON output from a snake (and an extra move field) into the input and output
+vectors for a neural network
+"""
+
 import os
 import sys
 import json
+import argparse
 import numpy as np
 
-INPUT_FOLDER = "moveDatabase"
-OUTPUT_FOLDER = "input"
+# Parses the arguments
+def get_input():
+    parser = argparse.ArgumentParser("Converts JSON output from a snake (and an extra move field) \
+into the input and output vectors for a neural network")
+    parser.add_argument("-i", "--input", default=".", help="The input folder consisting of files with\
+battlesnake JSON")
+    parser.add_argument("-o", "--output", default="output", help="The output folder of the input/output\
+vectors")
+    parser.add_argument("-w", "--width", default=20, type=int, help="The width of the game board")
+    parser.add_argument("-h", "--height", default=20, type=int, help="The height of the game board")
 
-WIDTH = 20
-HEIGHT = 20
+    args = parser.parse_args()
+    return args
 
+# Merges a list of lists
 def merge_lists(lists):
     merged = []
     [merged.extend(k) for k in lists]
     return merged
 
+# Encodes a list of x,y dictionaries into a vector
 def encode_xy_list(xyList, x=WIDTH, y=HEIGHT, onValue=1):
     output = np.zeros(x*y)
     for xy in xyList:
@@ -21,6 +37,7 @@ def encode_xy_list(xyList, x=WIDTH, y=HEIGHT, onValue=1):
         output[index] = 1
     return output
 
+# Encodes, from the JSON, the input vector
 def encode_input_vector(inputDict):
     you = inputDict["you"]["body"]["data"]
     you = encode_xy_list(you)
@@ -38,7 +55,7 @@ def encode_input_vector(inputDict):
 
     return np.concatenate((food, head, you, snakes))
     
-
+# Encodes, from the JSON, the output vector
 def encode_output_vector(inputDict):
     output = np.zeros(4)
     choices = ("up", "right", "down", "left")  
@@ -46,9 +63,11 @@ def encode_output_vector(inputDict):
     output[index] = 1
     return output
 
+# Makes a transformation on the input file name to the output file name
 def output_file_name_transformation(inputFile):
     return os.path.join(OUTPUT_FOLDER, os.path.basename(inputFile))
 
+# Transforms a file from JSON to input and output vectors
 def transform_file(inFile, outFile):
     os.makedirs(os.path.dirname(outFile), exist_ok=True)
 
@@ -66,6 +85,7 @@ def transform_file(inFile, outFile):
     with open(outFile, "w") as outputFile:
         outputFile.write(json.dumps(outputDict))
 
+# The main excecution function
 def main():
     print("Starting Transformation...")
 
@@ -84,7 +104,7 @@ def main():
             outFile = os.path.abspath(output_file_name_transformation(inFile))
             transform_file(inFile, outFile)
         except Exception as exception:
-            print("\lfFailed on {0}".format(inFile))
+            print("\nFailed on {0}".format(inFile))
             raise exception
 
     print("Completed Transformation...")
@@ -92,8 +112,3 @@ def main():
 if __name__ == "__main__":
     main()
             
-
-        
-        
-        
-        
