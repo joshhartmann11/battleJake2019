@@ -326,7 +326,7 @@ class Snake():
             self.health = self.health -1
         self.ateFood = False
  
-
+"""
 if __name__ == "__main__":
     gameWinners = []
     for i in range(1000):
@@ -348,11 +348,10 @@ if __name__ == "__main__":
 """
 
 if __name__ == "__main__":
-    s = BattleSnake(food=40, dims=[10,10])
+    s = BattleSnake(food=20, dims=[20,20])
     s.add_snake(Snake("SimpleJake", color=COLORS["cyan"]), SimpleJake())
     s.add_snake(Snake("MitchellNursey", color=COLORS["yellow"]), MitchellNursey())
     s.add_snake(Snake("SajanDinsa", color=COLORS["red"]), SajanDinsa())
     s.add_snake(Snake("Jake2018", color=COLORS["blue"]), Jake2018())
     s.start_game(speed=25, outputBoard=True, debug=False)
-"""
 	    

@@ -18,22 +18,22 @@ class MLP:
 
     def __init__(self, layers):
     
-        INITIAL_RPROP_RATE = 0.1
+        #INITIAL_RPROP_RATE = 0.1
 
         self.synapses = []
-        self.rPropRates = []
-        self.previousChange = []
+        #self.rPropRates = []
+        #self.previousChange = []
         self.layers = layers
          
         for i in range(len(layers)-1):
             self.synapses.append(np.matrix((np.random.rand(layers[i], layers[i+1]))-0.5))
-            self.rPropRates.append(np.matrix(np.full(layers[i+1], INITIAL_RPROP_RATE)))
-            self.previousChange.append(np.matrix((np.random.rand(layers[i], layers[i+1])) ))
+            #self.rPropRates.append(np.matrix(np.full(layers[i+1], INITIAL_RPROP_RATE)))
+            #self.previousChange.append(np.matrix((np.random.rand(layers[i], layers[i+1])) ))
         
     
     # Sigmoid activation function
     def sigmoid(self, x):
-        return 1 / (1 + np.exp(-0.5 * x))
+        return 1 / (1 + np.exp(-x))
         
     
     # Derivative of the sigmoid function
@@ -43,21 +43,21 @@ class MLP:
         
     
     # Propagate input through the network
-    def propigate(self, input, allLayers = False):
+    def propigate(self, input, synapses, allLayers = False):
     
         input = np.matrix(input)
         
         if(allLayers):
             layerInputs = [input]
             output = input
-            for syn in self.synapses:
+            for syn in synapses:
                 layerInputs.append(np.dot(output, syn))
                 output = self.sigmoid(layerInputs[-1])
             return layerInputs
             
         else:
             output = input
-            for syn in self.synapses:
+            for syn in synapses:
                 output = self.sigmoid(np.dot(output, syn))
             return output
 
@@ -84,10 +84,10 @@ class MLP:
     def learn(self, input, output, layerMul=1.1, lrate=0.1):
     
         if(type(input).__module__ == np.__name__):
-            change = self.back_propigate(output, self.propigate(input, allLayers=True))
+            change = self.back_propigate(output, self.propigate(input, self.synapses, allLayers=True))
             
         else:
-            change = self.back_propigate(output[0], self.propigate(input[0], allLayers=True))
+            change = self.back_propigate(output[0], self.propigate(input[0], self.synapses, allLayers=True))
             for i in range(1, len((input))):
                 tempChange = self.back_propigate(output[i], self.propigate(input[i], allLayers=True))
                 for i, t in enumerate(tempChange):
@@ -96,7 +96,7 @@ class MLP:
         for i, ch in enumerate(change):
             self.synapses[i] = np.add(self.synapses[i], ch * (-lrate - layerMul*i))
         
-
+"""
     # Tweaks synapse weights for a given input and expected output using R propagation
     def learn_rprop(self, input, output, layerMul = 0, changeMul = 0.5, momentumMul=1.1):
         
@@ -117,7 +117,7 @@ class MLP:
                 self.rPropRates[i] *= 1.05
             else:
                 self.rPropRates[i] *= 0.5
-            
+        """ 
         
         
         
