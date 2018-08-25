@@ -5,6 +5,7 @@ from TestSnakes.SimpleJake.SimpleJake import SimpleJake
 from TestSnakes.MitchellNursey.MitchellNursey import MitchellNursey
 from TestSnakes.MimicMitchellNursey.MimicMitchellNursey import MimicMitchellNursey
 from TestSnakes.SajanDinsa.SajanDinsa import SajanDinsa
+from TestSnakes.BattleJake2019.Jake2019 import Jake2019
 
 '''
 
@@ -82,6 +83,7 @@ class BattleSnake():
                 try:
                     output = s["ai"].move(input)
                 except Exception as e:
+                    print(e)
                     output = {"move": "up"}
                 s["snake"].move(output["move"])
             else:
@@ -261,9 +263,9 @@ class BattleSnake():
         food = self.food
     
         print(BORDER_COLOR + " " * 2 * self.dims["width"] + "    " + DEFAULT_COLOR, end="")
-        for i in range(self.dims["width"]):
+        for j in range(self.dims["width"]):
 	        print("\n" + BORDER_COLOR + "  " + DEFAULT_COLOR, end="")
-	        for j in range(self.dims["height"]):
+	        for i in range(self.dims["height"]):
 	            
 	            if ((i, j)) in food:
 	                print(FOOD_COLOR + "  " + DEFAULT_COLOR, end="")
@@ -306,7 +308,7 @@ class Snake():
     
     # Moves the snake
     def move(self, move):
-    
+
         head = self.body[0]
         
         if(move == "left"):
@@ -315,9 +317,11 @@ class Snake():
             self.body = [(head[0]+1, head[1])] + self.body
         elif(move == "down"):
             self.body =[(head[0], head[1]+1)] + self.body
-        else:
+        elif(move == "up"):
             self.body = [(head[0], head[1]-1)] + self.body
-            
+        else:
+            raise Exception("This is fucked: {}".format(move))
+
         if self.ateFood:
             self.health = 100
         else:
@@ -349,9 +353,10 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     s = BattleSnake(food=20, dims=[20,20])
-    s.add_snake(Snake("SimpleJake", color=COLORS["cyan"]), SimpleJake())
-    s.add_snake(Snake("MitchellNursey", color=COLORS["yellow"]), MitchellNursey())
-    s.add_snake(Snake("SajanDinsa", color=COLORS["red"]), SajanDinsa())
+    s.add_snake(Snake("SimpleJake", color=COLORS["blue"]), SimpleJake())
+    s.add_snake(Snake("MitchellNursey", color=COLORS["blue"]), MitchellNursey())
+    s.add_snake(Snake("SajanDinsa", color=COLORS["blue"]), SajanDinsa())
     s.add_snake(Snake("Jake2018", color=COLORS["blue"]), Jake2018())
-    s.start_game(speed=25, outputBoard=True, debug=False)
+    s.add_snake(Snake("Jake2019", color=COLORS["red"]), Jake2019("GrumpyIbex"))
+    s.start_game(speed=5, outputBoard=True, debug=False)
 	    
