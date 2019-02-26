@@ -43,15 +43,15 @@ def move(data=None):
     # Get all the data
     you = data['you']
     health = you["health"]
-    mySize = you['length']
-    body = [(b['x'], b['y']) for b in you['body']['data']]
+    mySize = len(you['body'])
+    body = [(b['x'], b['y']) for b in you['body']]
     head = body[0]
     walls = (data['width'], data['height'])
-    snakes = data['snakes']['data']
+    snakes = data['snakes']
     size = []
     for s in snakes:
-        size.append(s['length'])
-    snakes = [s['body']['data'] for s in snakes]
+        size.append(len(s['body']))
+    snakes = [s['body'] for s in snakes]
     snakes2 = []
     heads = []
     tails = []
@@ -61,7 +61,7 @@ def move(data=None):
         for s2 in s1:
             snakes2.append((s2['x'], s2['y']))
     snakes = snakes2
-    food = data['food']['data']
+    food = data['food']
     food = [(f['x'], f['y']) for f in food]
     numFood = len(food)
 
