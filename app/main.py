@@ -39,6 +39,7 @@ def start():
 def move(data=None):
     if not data:
         data = bottle.request.json
+    print(data.keys())
     # Get all the data
     you = data['you']
     health = you["health"]
