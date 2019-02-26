@@ -47,7 +47,7 @@ def move(data=None):
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
     print(data)
-    print(data.keys)
+    print(data.keys())
     snakes = data['snakes']
     size = []
     for s in snakes:
