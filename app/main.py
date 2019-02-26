@@ -36,7 +36,9 @@ def start():
 	}
 
 @bottle.post('/move')
-def move(data):
+def move(data=None):
+    if not data:
+        data = bottle.request.json
     # Get all the data
     you = data['you']
     health = you["health"]
