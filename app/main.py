@@ -130,16 +130,22 @@ def move(data=None):
         if have_choice(move, moves):
             move = random.choice(moves)
             debug_print("Random Choice:", move)
-        else:
-            if len(moves) == 0:
+
+        # No suggested moves
+        if move == None
+
+            # There is only one choice
+            if len(moves) == 1:
+                move = moves[0]
+                debug_print("Only Choice:  ", move)
+
+            # There is no choice
+            else:
                 move = eat_tail(head, tails)
                 debug_print("Eat Tail:      ", move)
                 if move == None:
                     move = 'up'
                     debug_print("Death:        ", move)
-            else:
-                move = moves[0]
-                debug_print("Only Choice:   ", move)
 
     except Exception as e:
         debug_print("ERROR: ", str(e))
