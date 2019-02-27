@@ -40,12 +40,10 @@ def move(data=None):
     if not data:
         data = bottle.request.json
     # Get all the data
-    print(data)
     you = data['you']
     health = you["health"]
     mySize = len(you['body'])
     body = [(b['x'], b['y']) for b in you['body']]
-    print(body)
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
     snakes = data['board']['snakes']
