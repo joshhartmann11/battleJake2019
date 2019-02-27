@@ -30,7 +30,7 @@ def start():
 		bottle.request.urlparts.netloc
 	)
 	return {
-		'color': '#AAFFAA',
+		'color': '#F0F0F0',
 		'taunt': 'Wake up Blake, you\'re a snake',
 		'head_url': headUrl
 	}
