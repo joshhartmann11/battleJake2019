@@ -64,6 +64,10 @@ def move(data=None):
     food = [(f['x'], f['y']) for f in food]
     numFood = len(food)
 
+    debug_print("Move Number:")
+    debug_print("My Size:    ", mySize)
+    debug_print("My Health:  ", health)
+
     try:
         move = None
 
@@ -135,7 +139,7 @@ def move(data=None):
             # There is only one choice
             if len(moves) == 1:
                 move = moves[0]
-                debug_print("Only Choice:  ", move)
+                debug_print("Only Choice:   ", move)
 
             # There is no choice
             else:
@@ -433,8 +437,6 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=True):
                     else:
                         directions['up'] = 0
 
-    directions2 = {key: value for key, value in directions.items()}
-
     # Be scared of the heads of others if they're scary
     for i, h in enumerate(heads):
 
@@ -469,13 +471,6 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=True):
 
                 else:
                     directions['up'] = 0
-
-    # If there's no other choice but to possibly collide with a head
-    if 1 not in directions.values() and op:
-        directions = directions2
-
-    if not op:
-        directions = directions2
 
     moves = [k for k in directions.keys() if directions[k] is 1]
 
