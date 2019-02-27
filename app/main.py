@@ -85,9 +85,9 @@ def move(data=None):
             for m in movesCpy:
                 nextHead = get_future_head(head, m)
                 if mySize > 2:
-                    nres = get_restrictions(nextHead, tails + [body[-2]], mySize, walls, snakes, heads, size, op=False)
+                    nres = get_restrictions(nextHead, tails + [body[-2]], mySize, walls, snakes, heads, size)
                 else:
-                    nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size, op=False)
+                    nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size)
                 if (nres == []) and (len(moves) > 1):
                     moves.remove(m)
                     debug_print("Restrictions2: ", moves)
@@ -396,7 +396,7 @@ def get_food(moves, head, food, dist):
     return list(set(validMoves))
 
 
-def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=True):
+def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=False):
 
     directions = {'up':1, 'down':1, 'left':1, 'right':1}
 
@@ -475,11 +475,12 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=True):
                     directions['up'] = 0
 
     # If there's no other choice but to possibly collide with a head
-    if 1 not in directions.values() and op:
-        directions = directions2
-
-    if not op:
-        directions = directions2
+    if 1 not in directions.values():
+        move = eat_tail(head, tails)
+        if move:
+            directions[move] = 1
+        else:
+            directions = directions2
 
     moves = [k for k in directions.keys() if directions[k] is 1]
 
