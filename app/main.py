@@ -40,6 +40,7 @@ def move(data=None):
     if not data:
         data = bottle.request.json
     # Get all the data
+    print(data)
     you = data['you']
     health = you["health"]
     mySize = len(you['body'])
