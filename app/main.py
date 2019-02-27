@@ -45,6 +45,7 @@ def move(data=None):
     health = you["health"]
     mySize = len(you['body'])
     body = [(b['x'], b['y']) for b in you['body']]
+    print(body)
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
     snakes = data['board']['snakes']
@@ -100,6 +101,11 @@ def move(data=None):
                     moves = get_food(moves, head, food, i)
                     debug_print("Gimme Brunch {}:".format(i), moves)
 
+        # Take killing others as preference
+        if have_choice(move, moves):
+            moves = kill_others(head, mySize, heads, size, moves)
+            debug_print("Kill Others:   ", moves)
+
         # Flee from a wall as preference
         if have_choice(move, moves):
             moves = flee_wall(moves, walls, head)
@@ -109,11 +115,6 @@ def move(data=None):
         if have_choice(move, moves):
             moves = flee_others(moves, [body[0], body[-1]], snakes, head, 1)
             debug_print("Flee Others:   ", moves)
-
-        # Take killing others as preference
-        if have_choice(move, moves):
-            moves = kill_others(head, mySize, heads, size, moves)
-            debug_print("Kill Others:   ", moves)
 
         # Go straight as preference
         if have_choice(move, moves):
@@ -216,9 +217,13 @@ def eat_tail(head, tails):
 
 
 def go_straight(moves, head, body):
+    print("GS")
     if len(body) > 1:
+        print("YUS")
         pm = get_previous_move(head, body[1])
+        print("PM, ", pm, moves)
         if pm in moves:
+            print("Returning PM")
             return pm
 
 
