@@ -139,13 +139,16 @@ def move(data=None):
                     debug_print("Death:        ", move)
             else:
                 move = moves[0]
+                debug_print("Only Choice:   ", move)
 
     except Exception as e:
         debug_print("ERROR: ", str(e))
         if moves == []:
             move = "up"
+            debug_print("ERROR: Going up")
         else:
             move = random.choice(moves)
+            debug_print("ERROR: Random choice")
 
     debug_print("MOVE: ", move)
 
