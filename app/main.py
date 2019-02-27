@@ -39,8 +39,6 @@ def start():
 def move(data=None):
     if not data:
         data = bottle.request.json
-    print(data.keys())
-    print(data['board'].keys())
     # Get all the data
     you = data['you']
     health = you["health"]
@@ -52,6 +50,7 @@ def move(data=None):
     size = []
     for s in snakes:
         size.append(len(s['body']))
+    print(size)
     snakes = [s['body'] for s in snakes]
     snakes2 = []
     heads = []
@@ -139,8 +138,7 @@ def move(data=None):
                 move = moves[0]
 
     except Exception as e:
-        raise(e)
-        print(e)
+        debug_print("ERROR: ", str(e))
         if moves == []:
             move = "up"
         else:
