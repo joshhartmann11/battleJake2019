@@ -30,7 +30,7 @@ def start():
 		bottle.request.urlparts.netloc
 	)
 	return {
-		'color': '#99FFFF',
+		'color': '#000000',
 		'taunt': 'Wake up Blake, you\'re a snake',
 		'head_url': headUrl
 	}
@@ -437,6 +437,8 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=True):
                     else:
                         directions['up'] = 0
 
+    directions2 = {key: value for key, value in directions.items()}
+
     # Be scared of the heads of others if they're scary
     for i, h in enumerate(heads):
 
@@ -471,6 +473,13 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, op=True):
 
                 else:
                     directions['up'] = 0
+
+    # If there's no other choice but to possibly collide with a head
+    if 1 not in directions.values() and op:
+        directions = directions2
+
+    if not op:
+        directions = directions2
 
     moves = [k for k in directions.keys() if directions[k] is 1]
 
