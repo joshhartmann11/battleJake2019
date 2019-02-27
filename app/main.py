@@ -50,7 +50,6 @@ def move(data=None):
     size = []
     for s in snakes:
         size.append(len(s['body']))
-    print(size)
     snakes = [s['body'] for s in snakes]
     snakes2 = []
     heads = []
