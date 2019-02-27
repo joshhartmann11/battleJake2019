@@ -128,12 +128,14 @@ def move(data=None):
         # Make a random choice for a move
         if have_choice(move, moves):
             move = random.choice(moves)
+            debug_print("Random Choice:", move)
         else:
             if len(moves) == 0:
                 move = eat_tail(head, tails)
                 debug_print("Eat Tail:      ", move)
                 if move == None:
                     move = 'up'
+                    debug_print("Death:        ", move)
             else:
                 move = moves[0]
 
