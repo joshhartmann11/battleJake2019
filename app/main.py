@@ -130,7 +130,7 @@ def move(data=None):
             debug_print("Random Choice:", move)
 
         # No suggested moves
-        if move == None
+        if move == None:
 
             # There is only one choice
             if len(moves) == 1:
