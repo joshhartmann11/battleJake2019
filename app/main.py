@@ -224,13 +224,9 @@ def eat_tail(head, tails):
 
 
 def go_straight(moves, head, body):
-    print("GS")
     if len(body) > 1:
-        print("YUS")
         pm = get_previous_move(head, body[1])
-        print("PM, ", pm, moves)
         if pm in moves:
-            print("Returning PM")
             return pm
 
 
