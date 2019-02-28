@@ -46,12 +46,9 @@ def move(data=None):
     # Get all the data
     you = data['you']
     health = you["health"]
-    print("BODY, ", you['body'])
     body = list(set([(b['x'], b['y']) for b in you['body']])) # Why? I don't know
-    print(body)
     mySize = len(body)
     head = body[0]
-    print("HEAD", head)
     walls = (data['board']['width'], data['board']['height'])
 
     snakes = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
@@ -432,6 +429,8 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, headScare
     # Don't hit other snakes (Except for exceptions (tail etc))
     for s in snakes:
         if s not in ignore:
+            print("S", s)
+            print("H", head)
             xdist = abs(s[0]-head[0])
             ydist = abs(s[1]-head[1])
 
