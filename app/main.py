@@ -72,7 +72,7 @@ def move(data=None):
         move = None
 
         # Moving restrictions
-        if mySize > 2:
+        if mySize > 3:
             moves = get_restrictions(head, [body[-1]], mySize, walls, snakes, heads, size, True)
         else:
             moves = get_restrictions(head, [], mySize, walls, snakes, heads, size, True)
@@ -84,7 +84,7 @@ def move(data=None):
             movesCpy = list(moves)
             for m in movesCpy:
                 nextHead = get_future_head(head, m)
-                if mySize > 2:
+                if mySize > 3:
                     nres = get_restrictions(nextHead, tails + [body[-2]], mySize, walls, snakes, heads, size, False)
                 else:
                     nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size, False)
