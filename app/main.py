@@ -2,6 +2,7 @@ import os
 import random
 import time
 import bottle
+import traceback
 
 DEBUG = True
 
@@ -172,6 +173,7 @@ def move(data=None):
 
     except Exception as e:
         debug_print("ERROR: ", str(e))
+        traceback.print_tb(e.__traceback__)
         if moves == []:
             move = "up"
             debug_print("ERROR: Going up")
