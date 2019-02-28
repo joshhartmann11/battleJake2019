@@ -51,10 +51,10 @@ def move(data=None):
     print(body)
     mySize = len(body)
     head = body[0]
+    print("HEAD", head)
     walls = (data['board']['width'], data['board']['height'])
 
     snakes = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
-    print(snakes)
     heads = [ s[0] for s in snakes ]
     tails = [ s[-1] for s in snakes ]
     size = [ len(s) for s in snakes ]
@@ -68,6 +68,7 @@ def move(data=None):
 
     try:
         move = None
+        moves = []
 
         # Moving restrictions
         if mySize > 3:
