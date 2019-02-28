@@ -48,12 +48,12 @@ def move(data=None):
     health = you["health"]
     body = list(set([(b['x'], b['y']) for b in you['body']])) # Why? I don't know
     mySize = len(body)
-    head = body[0]
+    head = (you['body'][0]['x'], you['body'][0]['y'])
     walls = (data['board']['width'], data['board']['height'])
 
     snakesTogether = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
-    heads = [ s[0] for s in snakesTogether ]
-    tails = [ s[-1] for s in snakesTogether ]
+    heads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
+    tails = [ (b['body'][-1]['x'], b['body'][-1]['y']) for b in data['board']['snakes'] ]
     size = [ len(s) for s in snakesTogether ]
     snakes = []
     [ snakes.extend(s) for s in snakesTogether ]
