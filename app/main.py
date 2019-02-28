@@ -29,8 +29,9 @@ def start():
 		bottle.request.urlparts.scheme,
 		bottle.request.urlparts.netloc
 	)
+    print("\n\n\n\n\n\n")
 	return {
-		'color': '#EADA00',
+		'color': '#EADA50',
 		'taunt': 'Wake up Blake, you\'re a snake',
 		'head_url': headUrl
 	}
@@ -44,7 +45,7 @@ def move(data=None):
     health = you["health"]
     mySize = len(you['body'])
     print("BODY, ", you['body'])
-    body = [(b['x'], b['y']) for b in you['body']]
+    body = list(set([(b['x'], b['y']) for b in you['body']])) # Why? I don't know
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
     snakes = data['board']['snakes']
