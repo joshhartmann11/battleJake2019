@@ -126,23 +126,23 @@ def move(data=None):
             # Move away from the heads of others 
             if have_choice(move, moves):
                 move = flee_heads(moves, heads, head)
-	            debug_print("Flee Heads:    ", move)
+                debug_print("Flee Heads:    ", move)
 
             # Go straight as preference
             if have_choice(move, moves):
                 move = go_straight(moves, head, body)
-	            debug_print("Go Straight:   ", move)
+                debug_print("Go Straight:   ", move)
 
-	    else:
+        else:
             # Go straight as preference
             if have_choice(move, moves):
                 move = go_straight(moves, head, body)
-	            debug_print("Go Straight:   ", move)
+                debug_print("Go Straight:   ", move)
 
             # Move away from the heads of others 
             if have_choice(move, moves):
                 move = flee_heads(moves, heads, head)
-	            debug_print("Flee Heads:    ", move)
+                debug_print("Flee Heads:    ", move)
 
         # Make a random choice for a move
         if have_choice(move, moves):
