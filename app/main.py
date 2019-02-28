@@ -83,7 +83,7 @@ def move(data=None):
             for m in movesCpy:
                 nextHead = get_future_head(head, m)
                 if mySize > 3:
-                    nres = get_restrictions(nextHead, tails + [body[-2]], mySize, walls, snakes, heads, size, False)
+                    nres = get_restrictions(nextHead, tails, mySize, walls, snakes, heads, size, False)
                 else:
                     nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size, False)
                 if (nres == []) and (len(moves) > 1):
@@ -431,8 +431,6 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, headScare
     # Don't hit other snakes (Except for exceptions (tail etc))
     for s in snakes:
         if s not in ignore:
-            print("S", s)
-            print("H", head)
             xdist = abs(s[0]-head[0])
             ydist = abs(s[1]-head[1])
 
