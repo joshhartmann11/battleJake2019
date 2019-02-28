@@ -47,6 +47,7 @@ def move(data=None):
     health = you["health"]
     print("BODY, ", you['body'])
     body = list(set([(b['x'], b['y']) for b in you['body']])) # Why? I don't know
+    print(body)
     mySize = len(body)
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
