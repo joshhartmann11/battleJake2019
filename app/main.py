@@ -95,6 +95,9 @@ def move(data=None):
 
 
         # Take food as first preference if health is low
+        if mySize < 6:
+            health = health/2
+
         if have_choice(move, moves) and (health < HUNGRY):
             maxFood = round( (1 - ((health-STARVING) / (HUNGRY-STARVING))) * (FOOD_MAX-FOOD_MIN) )
 
@@ -118,15 +121,28 @@ def move(data=None):
             moves = flee_others(moves, [body[0], body[-1]], snakes, head, 1)
             debug_print("Flee Others:   ", moves)
 
-        # Go straight as preference
-        if have_choice(move, moves):
-            move = go_straight(moves, head, body)
-            debug_print("Go Straight:   ", move)
+        
+        if mySize < 6:
+            # Move away from the heads of others 
+            if have_choice(move, moves):
+                move = flee_heads(moves, heads, head)
+	            debug_print("Flee Heads:    ", move)
 
-        # Move away from the heads of others
-        if have_choice(move, moves):
-            move = flee_heads(moves, heads, head)
-            debug_print("Flee Heads:    ", move)
+            # Go straight as preference
+            if have_choice(move, moves):
+                move = go_straight(moves, head, body)
+	            debug_print("Go Straight:   ", move)
+
+	    else:
+            # Go straight as preference
+            if have_choice(move, moves):
+                move = go_straight(moves, head, body)
+	            debug_print("Go Straight:   ", move)
+
+            # Move away from the heads of others 
+            if have_choice(move, moves):
+                move = flee_heads(moves, heads, head)
+	            debug_print("Flee Heads:    ", move)
 
         # Make a random choice for a move
         if have_choice(move, moves):
