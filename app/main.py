@@ -25,16 +25,18 @@ def static(path):
 
 @bottle.post('/start')
 def start():
-	headUrl = '%s://%s/static/head.png' % (
-		bottle.request.urlparts.scheme,
-		bottle.request.urlparts.netloc
-	)
+    headUrl = '%s://%s/static/head.png' % (
+        bottle.request.urlparts.scheme,
+        bottle.request.urlparts.netloc
+    )
+
     print("\n\n\n\n\n\n")
-	return {
-		'color': '#EADA50',
-		'taunt': 'Wake up Blake, you\'re a snake',
-		'head_url': headUrl
-	}
+
+    return {
+        'color': '#EADA50',
+        'taunt': 'Wake up Blake, you\'re a snake',
+        'head_url': headUrl
+    }
 
 @bottle.post('/move')
 def move(data=None):
@@ -43,9 +45,9 @@ def move(data=None):
     # Get all the data
     you = data['you']
     health = you["health"]
-    mySize = len(you['body'])
     print("BODY, ", you['body'])
     body = list(set([(b['x'], b['y']) for b in you['body']])) # Why? I don't know
+    mySize = len(body)
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
     snakes = data['board']['snakes']
