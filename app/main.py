@@ -85,10 +85,9 @@ def move(data=None):
                 if mySize > 3:
                     nres = get_restrictions(nextHead, tails, mySize, walls, snakes, heads, size, False)
                 else:
-                    print("RM", list(tails).remove(body[-1]))
-                    print("T", list(tails))
-                    print("B", body[-1])
-                    nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size, False)
+                    tails2 = list(tails)
+                    tails2.remove(body[-1])
+                    nres = get_restrictions(nextHead, tails2, mySize, walls, snakes, heads, size, False)
                 if (nres == []) and (len(moves) > 1):
                     moves.remove(m)
                     debug_print("Restrictions2: ", moves)
