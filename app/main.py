@@ -433,6 +433,7 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, headScare
     # Don't hit other snakes (Except for exceptions (tail etc))
     print("S", snakes)
     print("I", ignore)
+    print("H", head)
     for s in snakes:
         if s not in ignore:
             xdist = abs(s[0]-head[0])
