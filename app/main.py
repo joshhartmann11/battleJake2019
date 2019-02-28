@@ -55,7 +55,8 @@ def move(data=None):
     heads = [ s[0] for s in snakesTogether ]
     tails = [ s[-1] for s in snakesTogether ]
     size = [ len(s) for s in snakesTogether ]
-    snakes = list(set( [ ( b['x'], b['y'] ) for b in s['body'] for s in data['board']['snakes'] ] ))
+    snakes = []
+    [ snakes.extend(s) for s in snakesTogether ]
 
     food = [(f['x'], f['y']) for f in data['board']['food']]
     numFood = len(food)
