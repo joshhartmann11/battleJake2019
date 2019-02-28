@@ -43,6 +43,7 @@ def move(data=None):
     you = data['you']
     health = you["health"]
     mySize = len(you['body'])
+    print("BODY, ", you['body'])
     body = [(b['x'], b['y']) for b in you['body']]
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
