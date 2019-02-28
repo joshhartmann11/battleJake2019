@@ -52,22 +52,14 @@ def move(data=None):
     mySize = len(body)
     head = body[0]
     walls = (data['board']['width'], data['board']['height'])
-    snakes = data['board']['snakes']
-    size = []
-    for s in snakes:
-        size.append(len(s['body']))
-    snakes = [s['body'] for s in snakes]
-    snakes2 = []
-    heads = []
-    tails = []
-    for s1 in snakes:
-        heads.append((s1[0]['x'], s1[0]['y']))
-        tails.append((s1[-1]['x'], s1[-1]['y']))
-        for s2 in s1:
-            snakes2.append((s2['x'], s2['y']))
-    snakes = snakes2
-    food = data['board']['food']
-    food = [(f['x'], f['y']) for f in food]
+
+    snakes = [ list(set([ ( b['x'], b['y'] ) for b in s ])) for s in data['board']['snakes'] ]
+    print(snakes)
+    heads = [ s[0] for s in snakes ]
+    tails = [ s[-1] for s in snakes ]
+    size = [ len(s) for s in snakes ]
+
+    food = [(f['x'], f['y']) for f in data['board']['food']]
     numFood = len(food)
 
     debug_print("Move Number:")
