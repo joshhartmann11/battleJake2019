@@ -54,7 +54,7 @@ def move(data=None):
     snakesTogether = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
     heads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
     tails = [ (b['body'][-1]['x'], b['body'][-1]['y']) for b in data['board']['snakes'] ]
-    size = [ len(s) for s in snakesTogether ]
+    size = [ len(s['body']) for s in data['board']['snakes'] ]
     snakes = []
     [ snakes.extend(s) for s in snakesTogether ]
 
