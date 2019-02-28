@@ -30,7 +30,7 @@ def start():
 		bottle.request.urlparts.netloc
 	)
 	return {
-		'color': '#EAEAF2',
+		'color': '#EAEA00',
 		'taunt': 'Wake up Blake, you\'re a snake',
 		'head_url': headUrl
 	}
@@ -73,9 +73,9 @@ def move(data=None):
 
         # Moving restrictions
         if mySize > 2:
-            moves = get_restrictions(head, [body[-1]], mySize, walls, snakes, heads, size, tails, True)
+            moves = get_restrictions(head, [body[-1]], mySize, walls, snakes, heads, size, True)
         else:
-            moves = get_restrictions(head, [], mySize, walls, snakes, heads, size, tails, True)
+            moves = get_restrictions(head, [], mySize, walls, snakes, heads, size, True)
         debug_print("Restrictions:  ", moves)
 
         # Don't choose nothing that'll kill you next time
@@ -85,9 +85,9 @@ def move(data=None):
             for m in movesCpy:
                 nextHead = get_future_head(head, m)
                 if mySize > 2:
-                    nres = get_restrictions(nextHead, tails + [body[-2]], mySize, walls, snakes, heads, size, tails, False)
+                    nres = get_restrictions(nextHead, tails + [body[-2]], mySize, walls, snakes, heads, size, False)
                 else:
-                    nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size, tails, False)
+                    nres = get_restrictions(nextHead, list(tails).remove(body[-1]), mySize, walls, snakes, heads, size, False)
                 if (nres == []) and (len(moves) > 1):
                     moves.remove(m)
                     debug_print("Restrictions2: ", moves)
@@ -412,7 +412,7 @@ def get_food(moves, head, food, dist):
     return list(set(validMoves))
 
 
-def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, tails, headScare=False):
+def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, headScare=False):
 
     directions = {'up':1, 'down':1, 'left':1, 'right':1}
 
@@ -490,12 +490,6 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, tails, he
                 else:
                     directions['up'] = 0
 
-    # If there's no other choice but to possibly collide with a head
-    if 1 not in directions.values() and headScare and mySize > 2:
-        move = eat_tail(head, tails)
-        if move:
-            directions[move] = 1
-        directions = directions2
 
     moves = [k for k in directions.keys() if directions[k] is 1]
 
