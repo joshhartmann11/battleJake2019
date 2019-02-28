@@ -491,7 +491,7 @@ def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, tails, he
                     directions['up'] = 0
 
     # If there's no other choice but to possibly collide with a head
-    if 1 not in directions.values() and headScare:
+    if 1 not in directions.values() and headScare and mySize > 2:
         move = eat_tail(head, tails)
         if move:
             directions[move] = 1
