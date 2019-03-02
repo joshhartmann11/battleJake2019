@@ -256,6 +256,7 @@ def go_straight(moves, head, body):
 
 def flee_heads(moves, heads, head):
     minManhattan = 999
+    heads.remove(head)
     for h in heads:
         xdist = h[0]-head[0]
         ydist = h[1]-head[1]
