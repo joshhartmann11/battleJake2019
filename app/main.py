@@ -292,7 +292,6 @@ def eat_tail(head, snakes):
 def go_straight(moves, head, body):
     if len(body) > 1:
         pm = get_previous_move(head, body[1])
-        print("Previous move", pm)
         if pm in moves:
             return pm
 
@@ -530,18 +529,12 @@ def dont_get_eaten(moves, head, mySize, snakes):
 
     prevMoves = list(moves)
 
-    print("Don't get eat snake heads: ", [s['head'] for s in snakes])
-    print("Don't get eat snake sizes: ", [s['size'] for s in snakes])
-    print("Don't get eat my head:     ", head)
-
     for s in snakes:
         if (s['size'] >= mySize):
-            print("SCARRY SNAC")
             xdist = s['head'][0]-head[0]
             ydist = s['head'][1]-head[1]
 
             if abs(xdist) == 1 and abs(ydist) == 1:
-                print("1,1 within dist")
                 if xdist > 0 and 'right' in moves:
                     moves.remove('right')
 
@@ -555,7 +548,6 @@ def dont_get_eaten(moves, head, mySize, snakes):
                     moves.remove('up')
 
             elif (abs(xdist) == 2 and ydist == 0) or (abs(ydist) == 2 and xdist == 0):
-                print("2 within dist")
                 if xdist == 2 and 'right' in moves:
                     moves.remove('right')
 
