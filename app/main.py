@@ -111,11 +111,11 @@ def move(data=None):
                 moves = tmpMoves
         debug_print("Restrictions2: ", moves)
 
-        # Take food as first preference if health is low or I'm smol
+        # Take food as first preference is I'm smol
         if mySize < 6:
             health = health/2
 
-
+        # Take food as preference as I get more hungry
         if have_choice(move, moves) and (health < HUNGRY):
             maxFood = round( (1 - ((health-STARVING) / (HUNGRY-STARVING))) * (FOOD_MAX-FOOD_MIN) )
 
@@ -123,11 +123,6 @@ def move(data=None):
                 if have_choice(move, moves):
                     moves = get_food(moves, head, food, i)
                     debug_print("Gimme Brunch {}:".format(i), moves)
-
-        # Take killing others as preference
-        if have_choice(move, moves):
-            moves = kill_others(moves, head, mySize, snakes)
-            debug_print("Kill Others:   ", moves)
 
         # Flee from a wall as preference
         if have_choice(move, moves):
@@ -138,6 +133,11 @@ def move(data=None):
         if have_choice(move, moves):
             moves = flee_others(moves, [body[0], body[-1]], snakesTogether, head, 1)
             debug_print("Flee Others:   ", moves)
+
+        # Take killing others as preference
+        if have_choice(move, moves):
+            moves = kill_others(moves, head, mySize, snakes)
+            debug_print("Kill Others:   ", moves)
 
 
         if mySize < 6:
@@ -180,8 +180,17 @@ def move(data=None):
                 move = eat_tail(head, snakes)
                 debug_print("Eat Tail:      ", move)
                 if move == None:
-                    move = 'up'
-                    debug_print("Death:        ", move)
+                    moves = ['left', 'right', 'up', 'down']
+                    moves.dont_hit_wall(moves, head, walls)
+                    debug_print("Don't hit wall:", moves)
+                    moves.dont_hit_snakes(moves, head, snakes)
+                    debug_print("Don't hit snac:", moves)
+                    if moves == []:
+                        move = 'up'
+                        debug_print("Death:        ", move)
+                    else:
+                        move = random.choice(moves)
+
 
     except Exception as e:
         debug_print("ERROR: ", str(e))
@@ -318,6 +327,13 @@ def flee_others(moves, delMoves, snakesTogether, head, dist):
     if moves == []:
         return prevMoves
     return moves
+
+
+def ate_food(head, food, move):
+    if get_space(head, move) in food:
+        return True
+    else:
+        return False
 
 
 def flee_wall(moves, walls, head):
@@ -504,7 +520,7 @@ def dont_get_eaten(moves, head, mySize, snakes):
 
                 elif ydist == -2 and 'up' in moves:
                     moves.remove('up')
-                    
+
         return moves
 
 
