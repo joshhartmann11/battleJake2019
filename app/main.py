@@ -59,12 +59,12 @@ def move(data=None):
     # Get all the data
     you = data['you']
     you['body'] = [ (b['x'], b['y']) for b in you['body'] ]
-    you['head'] = (you['body'][0]['x'], you['body'][0]['y'])
+    you['head'] = you['body'][0]
     you['size'] = len(you['body'])
     health = you["health"]
     body = [ (b['x'], b['y']) for b in you['body'] ]
     mySize = len(body)
-    head = (you['body'][0]['x'], you['body'][0]['y'])
+    head = you['body'][0]
     walls = (data['board']['width'], data['board']['height'])
 
     snakesTogether = []
