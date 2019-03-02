@@ -144,7 +144,7 @@ def move(data=None):
         if mySize < 6:
             # Move away from the heads of others
             if have_choice(move, moves):
-                move = flee_heads(moves, snakes, head)
+                moves = flee_heads(moves, snakes, head)
                 debug_print("Flee Heads:    ", move)
 
             # Go straight as preference
@@ -160,7 +160,7 @@ def move(data=None):
 
             # Move away from the heads of others
             if have_choice(move, moves):
-                move = flee_heads(moves, snakes, head, dist=4)
+                moves = flee_heads(moves, snakes, head, dist=5)
                 debug_print("Flee Heads:    ", move)
 
         # Make a random choice for a move
@@ -294,22 +294,24 @@ def flee_heads(moves, snakes, head, dist=999):
         snake = snakes[s[1]]
         xdist = head[0] - snake['body'][0][0]
         ydist = head[1] - snake['body'][0][1]
-        
-        if len(moves) == 1:
-            return moves[0]
 
-        if (abs(xdist) < abs(ydist)):
+        if len(moves) == 1:
+            return moves
+
+        if abs(xdist) < abs(ydist) and xdist < dist:
             if ('left' in moves) and (xdist > 0):
                 moves.remove('left')
 
             if ('right' in moves) and (xdist < 0):
                 moves.remove('right')
-        else:
+        elif ydist < dist:
             if ('down' in moves) and (ydist < 0):
                 moves.remove('down')
 
             if ('up' in moves) and (ydist > 0):
                 moves.remove('up')
+        else:
+            return moves
 
 
 def flee_others(moves, delMoves, snakesTogether, head, dist):
