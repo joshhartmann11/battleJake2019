@@ -522,7 +522,7 @@ def dont_get_eaten(moves, head, mySize, snakes):
                 elif ydist == -2 and 'up' in moves:
                     moves.remove('up')
 
-        return moves
+    return moves
 
 
 # Expose WSGI app (so gunicorn can find it)
