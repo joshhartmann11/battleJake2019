@@ -66,6 +66,7 @@ def move(data=None):
     debug_print("Move Number:")
     debug_print("My Size:    ", mySize)
     debug_print("My Health:  ", health)
+    debug_print("My Body:    ", body)
 
     try:
         move = None
