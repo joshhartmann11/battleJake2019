@@ -58,6 +58,9 @@ def move(data=None):
     print(data["board"]["snakes"])
     # Get all the data
     you = data['you']
+    you['body'] = [ (b['x'], b['y']) for b in you['body'] ]
+    you['head'] = (you['body'][0]['x'], you['body'][0]['y'])
+    you['size'] = len(you['body'])
     health = you["health"]
     body = [ (b['x'], b['y']) for b in you['body'] ]
     mySize = len(body)
@@ -89,19 +92,19 @@ def move(data=None):
         # Moving restrictions
         if ate_food_last_turn:
             print("atefood")
-            moves = dont_hit_wall(moves, head, walls)
+            moves = dont_hit_wall(moves, you['head'], walls)
             debug_print("Don't hit wall:", moves)
-            moves = dont_hit_snakes(moves, head, snakesTogether, [])
+            moves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
             debug_print("Don't hit snak:", moves)
-            moves = dont_get_eaten(moves, head, mySize, snakes)
+            moves = dont_get_eaten(moves, you, snakes)
             debug_print("Don't get eat :", moves)
         else:
             print("notatefood")
-            moves = dont_hit_wall(moves, head, walls)
+            moves = dont_hit_wall(moves, you['head'], walls)
             debug_print("Don't hit wall:", moves)
-            moves = dont_hit_snakes(moves, head, snakesTogether, [body[-1]])
+            moves = dont_hit_snakes(moves, you['head'], snakesTogether, [you['body'][-1]])
             debug_print("Don't hit snak:", moves)
-            moves = dont_get_eaten(moves, head, mySize, snakes)
+            moves = dont_get_eaten(moves, you, snakes)
             debug_print("Don't get eat :", moves)
 
 
@@ -111,8 +114,8 @@ def move(data=None):
             for m in moves:
                 nextHead = get_space(head, m)
                 nextMoves = ['left', 'right', 'up', 'down']
-                nextMoves = dont_hit_wall(nextMoves, head, walls)
-                nextMoves = dont_hit_snakes(moves, head, snakesTogether, [])
+                nextMoves = dont_hit_wall(nextMoves, you['head'], walls)
+                nextMoves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
                 if nextMoves == []:
                     tmpMoves.remove(m)
             if tmpMoves != []:
@@ -193,9 +196,9 @@ def move(data=None):
                 debug_print("Eat Tail:      ", move)
                 if move == None:
                     moves = ['left', 'right', 'up', 'down']
-                    moves = dont_hit_wall(moves, head, walls)
+                    moves = dont_hit_wall(moves, you['head'], walls)
                     debug_print("Don't hit wall:", moves)
-                    moves = dont_hit_snakes(moves, head, snakes, [])
+                    moves = dont_hit_snakes(moves, you['head'], snakes, [])
                     debug_print("Don't hit snac:", moves)
                     if moves == []:
                         move = 'up'
@@ -525,14 +528,14 @@ def dont_hit_snakes(moves, head, snakesTogether, ignore):
     return moves
 
 
-def dont_get_eaten(moves, head, mySize, snakes):
+def dont_get_eaten(moves, you, snakes):
 
     prevMoves = list(moves)
 
     for s in snakes:
-        if (s['size'] >= mySize):
-            xdist = s['head'][0]-head[0]
-            ydist = s['head'][1]-head[1]
+        if (s['size'] >= you['size']):
+            xdist = s['head'][0]-you['head'][0]
+            ydist = s['head'][1]-you['head'][1]
 
             if abs(xdist) == 1 and abs(ydist) == 1:
                 if xdist > 0 and 'right' in moves:
