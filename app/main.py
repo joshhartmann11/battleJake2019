@@ -111,6 +111,7 @@ def move(data=None):
         # Don't choose nothing that'll kill you next time
         if len(moves) > 1:
             tmpMoves = list(moves)
+            print(moves)
             for m in moves:
                 print("FutureMove: ", m)
                 nextHead = get_space(head, m)
