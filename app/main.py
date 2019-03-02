@@ -413,10 +413,10 @@ def strangle_others(moves, head, mySize, body, snakes, walls):
                     elif mydir[0] < 0 and 'left' in moves and \
                          head[0] - s['head'][0] > -mySize and head[0] - s['head'][0] < 0:
                         return 'left'
-                    elif mydir[1] > 1 and 'down' in moves and \:
+                    elif mydir[1] > 1 and 'down' in moves and \
                          head[1] - s['head'][1] > mySize and head[1] - s['head'][1] > 0:
                         return 'down'
-                    elif mydir[1] < 1 and 'up' in moves and \:
+                    elif mydir[1] < 1 and 'up' in moves and \
                          head[1] - s['head'][1] > -mySize and head[1] - s['head'][1] < 0:
                         return 'up'
 
