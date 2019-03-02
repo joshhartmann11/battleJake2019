@@ -48,7 +48,7 @@ def move(data=None):
     # Get all the data
     you = data['you']
     health = you["health"]
-    body = list(set([(b['x'], b['y']) for b in you['body']]))
+    body = [ (b['x'], b['y']) for b in you['body'] ]
     mySize = len(body)
     head = (you['body'][0]['x'], you['body'][0]['y'])
     walls = (data['board']['width'], data['board']['height'])
