@@ -43,6 +43,7 @@ def start():
 
 @bottle.post('/move')
 def move(data=None):
+    global ate_food_last_turn
     if not data:
         data = bottle.request.json
     print('-'*50)
