@@ -45,6 +45,7 @@ def move(data=None):
         data = bottle.request.json
     print('-'*50)
     print('-'*50)
+    print(data["board"]["snakes"])
     # Get all the data
     you = data['you']
     health = you["health"]
