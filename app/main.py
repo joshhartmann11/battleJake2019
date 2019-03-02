@@ -160,7 +160,7 @@ def move(data=None):
 
             # Move away from the heads of others
             if have_choice(move, moves):
-                move = flee_heads(moves, snakes, head)
+                move = flee_heads(moves, snakes, head, dist=4)
                 debug_print("Flee Heads:    ", move)
 
         # Make a random choice for a move
@@ -286,27 +286,30 @@ def go_straight(moves, head, body):
             return pm
 
 
-def flee_heads(moves, snakes, head):
-    minManhattan = 999
-    for s in snakes:
-        xdist = s['head'][0]-head[0]
-        ydist = s['head'][1]-head[1]
+def flee_heads(moves, snakes, head, dist=999):
+    headManhattan = [ abs(s['head'][0]-head[0]) + abs(s['head'][1]-head[1]) for s in snakes]
+    closestSnakes = sorted( [(x,i) for (i,x) in enumerate(headManhattan)] )
 
-        manhattan = abs(xdist) + abs(ydist)
-        if manhattan < minManhattan and manhattan != 0:
-            minManhattan = manhattan
-            if (abs(xdist) < abs(ydist)):
-                if ('left' in moves) and (xdist > 0):
-                    return 'left'
+    for s in closestSnakes:
+        snake = snakes[s[1]]
+        xdist = head[0] - snake['body'][0][0]
+        ydist = head[1] - snake['body'][0][1]
+        
+        if len(moves) == 1:
+            return moves[0]
 
-                if ('right' in moves) and (xdist < 0):
-                    return 'right'
-            else:
-                if ('down' in moves) and (ydist < 0):
-                    return 'down'
+        if (abs(xdist) < abs(ydist)):
+            if ('left' in moves) and (xdist > 0):
+                moves.remove('left')
 
-                if ('up' in moves) and (ydist > 0):
-                    return 'up'
+            if ('right' in moves) and (xdist < 0):
+                moves.remove('right')
+        else:
+            if ('down' in moves) and (ydist < 0):
+                moves.remove('down')
+
+            if ('up' in moves) and (ydist > 0):
+                moves.remove('up')
 
 
 def flee_others(moves, delMoves, snakesTogether, head, dist):
