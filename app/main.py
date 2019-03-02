@@ -91,7 +91,7 @@ def move(data=None):
                 nextMoves = ['left', 'right', 'up', 'down']
                 nextMoves = dont_hit_wall(nextMoves, head, walls)
                 nextMoves = dont_hit_snakes(moves, head, snakes)
-                if nextMoves = []:
+                if nextMoves == []:
                     tmpMoves.remove(m)
             if tmpMoves != []:
                 moves = tmpMoves
