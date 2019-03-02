@@ -126,7 +126,7 @@ def move(data=None):
                     debug_print("Gimme Brunch {}:".format(i), moves)
 
         if have_choise(moves, moves):
-            move = strangle_others(moves, head, mySize, body, snakes, walls):
+            move = strangle_others(moves, head, mySize, body, snakes, walls)
             debug_print("Stangle Others:", move)
 
         # Flee from a wall as preference
