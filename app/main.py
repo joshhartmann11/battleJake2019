@@ -53,12 +53,15 @@ def move(data=None):
     head = (you['body'][0]['x'], you['body'][0]['y'])
     walls = (data['board']['width'], data['board']['height'])
 
-    snakesTogether = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
-    snakeHeads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
-    tails = [ (b['body'][-1]['x'], b['body'][-1]['y']) for b in data['board']['snakes'] ]
-    snakeSizes =  [ len(s['body']) for s in data['board']['snakes'] ]
-    snakes = []
-    [ snakes.extend(s) for s in snakesTogether ]
+    snakesTogether = []
+    [ [ snakesTogether.append(( b['x'], b['y'] )) for b in s['body'] ] for s in data['board']['snakes'] ]
+
+    snakes = data['board']['snakes']
+    for s in snakes:
+        s['size'] = len(s['body'])
+        s['body'] = [ (b['x'], b['y']) for b in s['body'] ]
+        s['head'] = s['body'][0]
+        s['tail'] = s['body'][-1]
 
     food = [(f['x'], f['y']) for f in data['board']['food']]
     numFood = len(food)
@@ -76,18 +79,18 @@ def move(data=None):
         if mySize > 3:
             moves = dont_hit_wall(moves, head, walls)
             debug_print("Don't hit wall:", moves)
-            moves = dont_hit_snakes(moves, head, snakes, [body[-1]])
+            moves = dont_hit_snakes(moves, head, snakesTogether, [body[-1]])
             debug_print("Don't hit snak:", moves)
-            moves = dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes)
+            moves = dont_get_eaten(moves, head, mySize, snakes)
             debug_print("Don't get eat :", moves)
         else:
             moves = dont_hit_wall(moves, head, walls)
             debug_print("Don't hit wall:", moves)
-            moves = dont_hit_snakes(moves, head, snakes, [])
+            moves = dont_hit_snakes(moves, head, snakesTogether, [])
             debug_print("Don't hit snak:", moves)
-            moves = dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes)
+            moves = dont_get_eaten(moves, head, mySize, snakes)
             debug_print("Don't get eat :", moves)
-    
+
 
         # Don't choose nothing that'll kill you next time
         if len(moves) > 1:
@@ -96,7 +99,7 @@ def move(data=None):
                 nextHead = get_space(head, m)
                 nextMoves = ['left', 'right', 'up', 'down']
                 nextMoves = dont_hit_wall(nextMoves, head, walls)
-                nextMoves = dont_hit_snakes(moves, head, snakes, [])
+                nextMoves = dont_hit_snakes(moves, head, snakesTogether, [])
                 if nextMoves == []:
                     tmpMoves.remove(m)
             if tmpMoves != []:
@@ -118,7 +121,7 @@ def move(data=None):
 
         # Take killing others as preference
         if have_choice(move, moves):
-            moves = kill_others(moves, head, mySize, snakeHeads, snakeSizes)
+            moves = kill_others(moves, head, mySize, snakes)
             debug_print("Kill Others:   ", moves)
 
         # Flee from a wall as preference
@@ -128,7 +131,7 @@ def move(data=None):
 
         # Flee others (including yourself) as preference
         if have_choice(move, moves):
-            moves = flee_others(moves, [body[0], body[-1]], snakes, head, 1)
+            moves = flee_others(moves, [body[0], body[-1]], snakesTogether, head, 1)
             debug_print("Flee Others:   ", moves)
 
 
@@ -169,7 +172,7 @@ def move(data=None):
 
             # There is no choice
             else:
-                move = eat_tail(head, tails)
+                move = eat_tail(head, snakes)
                 debug_print("Eat Tail:      ", move)
                 if move == None:
                     move = 'up'
@@ -237,10 +240,10 @@ def get_previous_move(head, second):
             return 'left'
 
 
-def eat_tail(head, tails):
-    for tail in tails:
-        xdist = head[0] - tail[0]
-        ydist = head[1] - tail[1]
+def eat_tail(head, snakes):
+    for s in snakes:
+        xdist = head[0] - s['tail'][0]
+        ydist = head[1] - s['tail'][1]
         if abs(xdist) == 1 and ydist == 0:
             if xdist > 0:
                 return 'left'
@@ -262,12 +265,12 @@ def go_straight(moves, head, body):
             return pm
 
 
-def flee_heads(moves, heads, head):
+def flee_heads(moves, snakes, head):
     minManhattan = 999
     heads.remove(head)
-    for h in heads:
-        xdist = h[0]-head[0]
-        ydist = h[1]-head[1]
+    for s in snakes:
+        xdist = s['head'][0]-head[0]
+        ydist = s['head'][1]-head[1]
 
         manhattan = abs(xdist) + abs(ydist)
         if manhattan < minManhattan:
@@ -354,13 +357,13 @@ def flee_wall(moves, walls, head):
 
 
 # If you're bigger than other snake, kill them
-def kill_others(moves, head, mySize, snakeHeads, snakeSizes):
+def kill_others(moves, head, mySize, snakes):
     validMoves = []
-    for i, h in enumerate(snakeHeads):
+    for s in snakes:
 
-        if snakeSizes[i] < mySize:
-            xdist = h[0]-head[0]
-            ydist = h[1]-head[1]
+        if s['size'] < mySize:
+            xdist = s['head'][0]-head[0]
+            ydist = s['head'][1]-head[1]
 
             if (abs(xdist) == 1) and (abs(ydist) == 1):
                 if xdist > 0 and 'right' in moves:
@@ -434,30 +437,30 @@ def dont_hit_wall(moves, head, walls):
     return moves
 
 
-def dont_hit_snakes(moves, head, snakes, ignore):
-    if get_space(head, 'left') in snakes and 'left' in moves:
+def dont_hit_snakes(moves, head, snakesTogether, ignore):
+    if get_space(head, 'left') in snakesTogether and 'left' in moves:
         moves.remove('left')
 
-    if get_space(head, 'right') in snakes and 'right' in moves:
+    if get_space(head, 'right') in snakesTogether and 'right' in moves:
         moves.remove('right')
 
-    if get_space(head, 'up') in snakes and 'up' in moves:
+    if get_space(head, 'up') in snakesTogether and 'up' in moves:
         moves.remove('up')
 
-    if get_space(head, 'down') in snakes and 'down' in moves:
+    if get_space(head, 'down') in snakesTogether and 'down' in moves:
         moves.remove('down')
 
     return moves
 
 
-def dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes):
+def dont_get_eaten(moves, head, mySize, snakes):
 
     prevMoves = list(moves)
 
-    for i, h in enumerate(snakeHeads):
-        if (snakeSizes[i] >= mySize):
-            xdist = h[0]-head[0]
-            ydist = h[1]-head[1]
+    for s in snakes:
+        if (s['size'] >= mySize):
+            xdist = s['head'][0]-head[0]
+            ydist = s['head'][1]-head[1]
 
             if abs(xdist) == 1 and abs(ydist) == 1:
 
