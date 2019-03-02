@@ -125,7 +125,7 @@ def move(data=None):
                     moves = get_food(moves, head, food, i)
                     debug_print("Gimme Brunch {}:".format(i), moves)
 
-        if have_choise(moves, moves):
+        if have_choice(moves, moves):
             move = strangle_others(moves, head, mySize, body, snakes, walls)
             debug_print("Stangle Others:", move)
 
