@@ -288,15 +288,15 @@ def eat_tail(head, snakes):
         ydist = head[1] - s['tail'][1]
         if abs(xdist) == 1 and ydist == 0:
             if xdist > 0:
-                moves.append['left']
+                moves.append('left')
             else:
-                moves.append['right']
+                moves.append('right')
 
         if abs(ydist) == 1 and xdist == 0:
             if ydist > 0:
-                moves.append['up']
+                moves.append('up')
             else:
-                moves.append['down']
+                moves.append('down')
     return moves
 
 
