@@ -125,6 +125,10 @@ def move(data=None):
                     moves = get_food(moves, head, food, i)
                     debug_print("Gimme Brunch {}:".format(i), moves)
 
+        if have_choise(moves, moves):
+            move = strangle_others(moves, head, mySize, body, snakes, walls):
+            debug_print("Stangle Others:", move)
+
         # Flee from a wall as preference
         if have_choice(move, moves):
             moves = flee_wall(moves, walls, head)
@@ -137,7 +141,7 @@ def move(data=None):
 
         # Take killing others as preference
         if have_choice(move, moves):
-            moves = kill_others(moves, head, mySize, snakes)
+            moves = eat_others(moves, head, mySize, snakes)
             debug_print("Kill Others:   ", moves)
 
 
@@ -388,9 +392,38 @@ def flee_wall(moves, walls, head):
         return moves
     return validMoves
 
+def strangle_others(moves, head, mySize, body, snakes, walls):
+
+    if head[0] == 0 or head[0] == walls[0]-2 or \
+       head[1] == 0 or head[1] == walls[1]-2:
+
+        mydir = (head[0] - body[1][0], head[1] - body[1][1])
+        for s in snakes:
+            snakedir = (s['head'][0] - s['body'][1][0], s['head'][1] - s['body'][1][1])
+            # snake heading in same direction
+            if snakedir == mydir:
+                # snake on the wall
+                if s['head'][0] == 0 or \
+                   s['head'][0] == walls[0]-1 or \
+                   s['head'][1] == 0 or \
+                   s['head'][1] == walls[0]-1:
+                    if mydir[0] > 0 and 'right' in moves and \
+                       head[0] - s['head'][0] < mySize and head[0] - s['head'][0] > 0:
+                        return 'right'
+                    elif mydir[0] < 0 and 'left' in moves and \
+                         head[0] - s['head'][0] > -mySize and head[0] - s['head'][0] < 0:
+                        return 'left'
+                    elif mydir[1] > 1 and 'down' in moves and \:
+                         head[1] - s['head'][1] > mySize and head[1] - s['head'][1] > 0:
+                        return 'down'
+                    elif mydir[1] < 1 and 'up' in moves and \:
+                         head[1] - s['head'][1] > -mySize and head[1] - s['head'][1] < 0:
+                        return 'up'
+
+
 
 # If you're bigger than other snake, kill them
-def kill_others(moves, head, mySize, snakes):
+def eat_others(moves, head, mySize, snakes):
     validMoves = []
     for s in snakes:
 
