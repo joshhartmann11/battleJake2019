@@ -77,8 +77,8 @@ def move(data=None):
     numFood = len(food)
 
     debug_print("Move Number:")
-    debug_print("My Size:    ", mySize)
-    debug_print("My Health:  ", health)
+    debug_print("My Size:    ", you['size'])
+    debug_print("My Health:  ", you['health'])
 
     try:
         move = None
