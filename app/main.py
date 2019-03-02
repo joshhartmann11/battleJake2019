@@ -361,7 +361,7 @@ def kill_others(moves, head, mySize, snakes):
     validMoves = []
     for s in snakes:
 
-        if s['size'] < mySize:
+        if s['size'] < mySize-1:
             xdist = s['head'][0]-head[0]
             ydist = s['head'][1]-head[1]
 
