@@ -15,7 +15,7 @@ STARVING = 15
 # Max searching radius
 FOOD_MAX = 10
 
-SIZE_FOOD_THRESHOLD = 0
+SIZE_THRESHOLD = 0
 
 ate_food_last_turn = False;
 
@@ -155,28 +155,15 @@ def move(data=None):
             moves = eat_others(moves, you['head'], you['size'], snakes)
             debug_print("Kill Others:   ", moves)
 
+        # Move away from the heads of others
+        if have_choice(move, moves):
+            moves = flee_heads(moves, snakes, you['head'], dist=3)
+            debug_print("Flee Heads:    ", move)
 
-        if you["size"] < SIZE_FOOD_THRESHOLD:
-            # Move away from the heads of others
-            if have_choice(move, moves):
-                moves = flee_heads(moves, snakes, you['head'])
-                debug_print("Flee Heads:    ", move)
-
-            # Go straight as preference
-            if have_choice(move, moves):
-                move = go_straight(moves, you['head'], you['body'])
-                debug_print("Go Straight:   ", move)
-
-        else:
-            # Go straight as preference
-            if have_choice(move, moves):
-                move = go_straight(moves, you['head'], you['body'])
-                debug_print("Go Straight:   ", move)
-
-            # Move away from the heads of others
-            if have_choice(move, moves):
-                moves = flee_heads(moves, snakes, you['head'], dist=5)
-                debug_print("Flee Heads:    ", move)
+        # Go straight as preference
+        if have_choice(move, moves):
+            move = go_straight(moves, you['head'], you['body'])
+            debug_print("Go Straight:   ", move)
 
         # Make a random choice for a move
         if have_choice(move, moves):
