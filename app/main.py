@@ -286,7 +286,7 @@ def flee_others(moves, delMoves, snakes, head, dist):
     for s in snakes:
         if s not in delMoves:
             for m in moves:
-                fh = get_next_position(head, m)
+                fh = get_space(head, m)
                 xdist = s[0]-fh[0]
                 ydist = s[1]-fh[1]
 
