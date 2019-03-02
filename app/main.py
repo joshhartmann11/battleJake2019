@@ -200,7 +200,7 @@ def move(data=None):
                     moves = ['left', 'right', 'up', 'down']
                     moves = dont_hit_wall(moves, you['head'], walls)
                     debug_print("Don't hit wall:", moves)
-                    moves = dont_hit_snakes(moves, you['head'], snakeTogether, [])
+                    moves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
                     debug_print("Don't hit snac:", moves)
                     if moves == []:
                         move = 'up'
