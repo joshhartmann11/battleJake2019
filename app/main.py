@@ -7,7 +7,7 @@ import traceback
 DEBUG = True
 
 # The higher the quicker we start searching for food
-HUNGRY = 60
+HUNGRY = 50
 # Starting search radius
 FOOD_MIN = 1
 # When we start searching our max radius
@@ -62,11 +62,7 @@ def move(data=None):
     you['head'] = you['body'][0]
     you['size'] = len(you['body'])
     health = you["health"]
-    body = you['body']
-    mySize = len(body)
-    head = you['body'][0]
     walls = (data['board']['width'], data['board']['height'])
-
     snakesTogether = []
     [ [ snakesTogether.append(( b['x'], b['y'] )) for b in s['body'] ] for s in data['board']['snakes'] ]
 
@@ -114,7 +110,7 @@ def move(data=None):
             print(moves)
             for m in moves:
                 print("FutureMove: ", m)
-                nextHead = get_space(head, m)
+                nextHead = get_space(you['head'], m)
                 nextMoves = ['left', 'right', 'up', 'down']
                 nextMoves = dont_hit_wall(nextMoves, nextHead, walls)
                 nextMoves = dont_hit_snakes(nextMoves, nextHead, snakesTogether + [you['head']], [])
@@ -126,58 +122,58 @@ def move(data=None):
         debug_print("Restrictions2: ", moves)
 
         # Take food as first preference is I'm smol
-        if mySize < 6:
-            health = health/2
+        if you['size'] < 6:
+            you["health"] = you["health"]/2
 
         # Take food as preference as I get more hungry
-        if have_choice(move, moves) and (health < HUNGRY):
-            maxFood = round( (1 - ((health-STARVING) / (HUNGRY-STARVING))) * (FOOD_MAX-FOOD_MIN) )
+        if have_choice(move, moves) and (you["health"] < HUNGRY):
+            maxFood = round( (1 - ((you["health"]-STARVING) / (HUNGRY-STARVING))) * (FOOD_MAX-FOOD_MIN) )
 
             for i in reversed(range(1, maxFood)):
                 if have_choice(move, moves):
-                    moves = get_food(moves, head, food, i)
+                    moves = get_food(moves, you['head'], food, i)
                     debug_print("Gimme Brunch {}:".format(i), moves)
 
         if have_choice(moves, moves):
-            move = strangle_others(moves, head, mySize, body, snakes, walls)
+            move = strangle_others(moves, you['head'], you['size'], you['body'], snakes, walls)
             debug_print("Stangle Others:", move)
 
         # Flee from a wall as preference
         if have_choice(move, moves):
-            moves = flee_wall(moves, walls, head)
+            moves = flee_wall(moves, walls, you['head'])
             debug_print("Flee Wall:     ", moves)
 
         # Flee others (including yourself) as preference
         if have_choice(move, moves):
-            moves = flee_others(moves, [body[0], body[-1]], snakesTogether, head, 1)
+            moves = flee_others(moves, [you['body'][0], you['body'][-1]], snakesTogether,you['head'], 1)
             debug_print("Flee Others:   ", moves)
 
         # Take killing others as preference
         if have_choice(move, moves):
-            moves = eat_others(moves, head, mySize, snakes)
+            moves = eat_others(moves, you['head'], you['size'], snakes)
             debug_print("Kill Others:   ", moves)
 
 
-        if mySize < 6:
+        if you["size"] < 6:
             # Move away from the heads of others
             if have_choice(move, moves):
-                moves = flee_heads(moves, snakes, head)
+                moves = flee_heads(moves, snakes, you['head'])
                 debug_print("Flee Heads:    ", move)
 
             # Go straight as preference
             if have_choice(move, moves):
-                move = go_straight(moves, head, body)
+                move = go_straight(moves, you['head'], you['body'])
                 debug_print("Go Straight:   ", move)
 
         else:
             # Go straight as preference
             if have_choice(move, moves):
-                move = go_straight(moves, head, body)
+                move = go_straight(moves, you['head'], you['body'])
                 debug_print("Go Straight:   ", move)
 
             # Move away from the heads of others
             if have_choice(move, moves):
-                moves = flee_heads(moves, snakes, head, dist=5)
+                moves = flee_heads(moves, snakes, you['head'], dist=5)
                 debug_print("Flee Heads:    ", move)
 
         # Make a random choice for a move
@@ -195,7 +191,7 @@ def move(data=None):
 
             # There is no choice
             else:
-                move = eat_tail(head, snakes)
+                move = eat_tail(you['head'], snakes)
                 debug_print("Eat Tail:      ", move)
                 if move == None:
                     moves = ['left', 'right', 'up', 'down']
@@ -223,7 +219,7 @@ def move(data=None):
 
     debug_print("MOVE: ", move)
 
-    if ate_food(head, food, move):
+    if ate_food(you['head'], food, move):
         ate_food_last_turn = True
     else:
         ate_food_last_turn = False
