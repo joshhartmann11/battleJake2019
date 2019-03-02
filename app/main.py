@@ -69,35 +69,35 @@ def move(data=None):
 
     try:
         move = None
-        moves = []
+        moves = ['left', 'right', 'up', 'down']
 
 
         # Moving restrictions
         if mySize > 3:
-            moves = get_restrictions(head, [body[-1]], mySize, walls, snakes, heads, size, True)
+            moves = dont_hit_wall(moves, head, walls)
+            moves = dont_hit_snakes(moves, head, snakes, [body[-1]])
+            moves = dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes)
         else:
-            moves = get_restrictions(head, [], mySize, walls, snakes, heads, size, True)
+            moves = dont_hit_wall(moves, head, walls)
+            moves = dont_hit_snakes(moves, head, snakes, [])
+            moves = dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes)
         debug_print("Restrictions:  ", moves)
 
         # Don't choose nothing that'll kill you next time
         if len(moves) > 1:
+            tmpMoves = list(moves)
+            for m in moves:
+                nextHead = get_space(head, m)
+                nextMoves = ['left', 'right', 'up', 'down']
+                nextMoves = dont_hit_wall(nextMoves, head, walls)
+                nextMoves = dont_hit_snakes(moves, head, snakes)
+                if nextMoves = []:
+                    tmpMoves.remove(m)
+            if tmpMoves != []:
+                moves = tmpMoves
+        debug_print("Restrictions2: ", moves)
 
-            movesCpy = list(moves)
-            for m in movesCpy:
-                nextHead = get_future_head(head, m)
-                if mySize > 3:
-                    nres = get_restrictions(nextHead, tails, mySize, walls, snakes, heads, size, False)
-                else:
-                    tails2 = list(tails)
-                    tails2.remove(body[-1])
-                    nres = get_restrictions(nextHead, tails2, mySize, walls, snakes, heads, size, False)
-                if (nres == []) and (len(moves) > 1):
-                    moves.remove(m)
-                    debug_print("Restrictions2: ", moves)
-
-
-
-        # Take food as first preference if health is low
+        # Take food as first preference if health is low or I'm smol
         if mySize < 6:
             health = health/2
 
@@ -111,7 +111,7 @@ def move(data=None):
 
         # Take killing others as preference
         if have_choice(move, moves):
-            moves = kill_others(head, mySize, heads, size, moves)
+            moves = kill_others(moves, head, mySize, heads, size)
             debug_print("Kill Others:   ", moves)
 
         # Flee from a wall as preference
@@ -199,19 +199,19 @@ def have_choice(move, moves):
     return True
 
 
-def get_future_head(head, move):
+def get_space(space, move):
 
     if move == 'left':
-        return (head[0] - 1, head[1])
+        return (space[0] - 1, space[1])
 
     elif move == 'right':
-        return (head[0] + 1, head[1])
+        return (space[0] + 1, space[1])
 
     elif move == 'up':
-        return (head[0], head[1] - 1)
+        return (space[0], space[1] - 1)
 
     else:
-        return (head[0], head[1] + 1)
+        return (space[0], space[1] + 1)
 
 
 def get_previous_move(head, second):
@@ -284,7 +284,7 @@ def flee_others(moves, delMoves, snakes, head, dist):
     for s in snakes:
         if s not in delMoves:
             for m in moves:
-                fh = get_future_head(head, m)
+                fh = get_next_position(head, m)
                 xdist = s[0]-fh[0]
                 ydist = s[1]-fh[1]
 
@@ -345,19 +345,15 @@ def flee_wall(moves, walls, head):
 
 
 # If you're bigger than other snake, kill them
-def kill_others(head, mySize, heads, size, moves):
-
+def kill_others(moves, head, mySize, snakeHeads, snakeSizes):
     validMoves = []
+    for i, h in enumerate(snakeHeads):
 
-    for i, h in enumerate(heads):
-
-        if size[i] < mySize:
-
+        if snakeSizes[i] < mySize:
             xdist = h[0]-head[0]
             ydist = h[1]-head[1]
 
             if (abs(xdist) == 1) and (abs(ydist) == 1):
-
                 if xdist > 0 and 'right' in moves:
                     validMoves.append('right')
 
@@ -371,7 +367,6 @@ def kill_others(head, mySize, heads, size, moves):
                     validMoves.append('up')
 
             elif (abs(xdist) == 2 and ydist == 0) or (abs(ydist) == 2 and xdist == 0):
-
                 if xdist == 2 and 'right' in moves:
                     validMoves.append('right')
 
@@ -390,9 +385,7 @@ def kill_others(head, mySize, heads, size, moves):
 
 
 def get_food(moves, head, food, dist):
-
     validMoves = []
-
     for f in food:
         xdist = f[0]-head[0]
         ydist = f[1]-head[1]
@@ -416,90 +409,79 @@ def get_food(moves, head, food, dist):
     return list(set(validMoves))
 
 
-def get_restrictions(head, ignore, mySize, walls, snakes, heads, size, headScare=False):
+def dont_hit_wall(moves, head, walls):
+    if head[0] == walls[0]-1 and 'right' in moves:
+        moves.remove('right')
 
-    directions = {'up':1, 'down':1, 'left':1, 'right':1}
+    elif head[0] == 0 and 'left' in moves:
+        moves.remove('left')
 
-    # Don't hit a wall
-    if head[0] == walls[0]-1:
-        directions['right'] = 0
+    if head[1] == 0 and 'up' in moves:
+        moves.remove('up')
 
-    elif head[0] == 0:
-        directions['left'] = 0
+    elif head[1] == walls[1]-1 and 'down' in moves:
+        moves.remove('down')
 
-    if head[1] == 0:
-        directions['up'] = 0
+    return moves
 
-    elif head[1] == walls[1]-1:
-        directions['down'] = 0
 
-    # Don't hit other snakes (Except for exceptions (tail etc))
-    for s in snakes:
-        if s not in ignore:
-            xdist = abs(s[0]-head[0])
-            ydist = abs(s[1]-head[1])
+def dont_hit_snakes(moves, head, snakes, ignore):
+    if get_space(head, 'left') in snakes and 'left' in moves:
+        moves.remove('left')
 
-            if xdist + ydist == 1:
+    if get_space(head, 'right') in snakes and 'right' in moves:
+        moves.remove('right')
 
-                if xdist == 1:
+    if get_space(head, 'up') in snakes and 'up' in moves:
+        moves.remove('up')
 
-                    if s[0] > head[0]:
-                        directions['right'] = 0
+    if get_space(head, 'down') in snakes and 'down' in moves:
+        moves.remove('down')
 
-                    else:
-                        directions['left'] = 0
+    return moves
 
-                else:
 
-                    if s[1] > head[1]:
-                        directions['down'] = 0
+def dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes):
 
-                    else:
-                        directions['up'] = 0
+    prevMoves = list(moves)
 
-    directions2 = {key: value for key, value in directions.items()}
-
-    # Be scared of the heads of others if they're scary
-    for i, h in enumerate(heads):
-
-        if not (size[i] < mySize):
+    for i, h in enumerate(snakeHeads):
+        if (snakeSizes[i] >= mySize):
             xdist = h[0]-head[0]
             ydist = h[1]-head[1]
 
             if abs(xdist) == 1 and abs(ydist) == 1:
 
                 if xdist > 0:
-                    directions['right'] = 0
+                    moves.remove('right')
 
                 elif xdist < 0:
-                    directions['left'] = 0
+                    moves.remove('left')
 
                 if ydist > 0:
-                    directions['down'] = 0
+                    moves.remove('down')
 
                 elif ydist < 0:
-                    directions['up'] = 0
+                    moves.remove('up')
 
             elif (abs(xdist) == 2 and ydist == 0) ^ (abs(ydist) == 2 and xdist == 0):
 
                 if xdist == 2:
-                    directions['right'] = 0
+                    moves.remove('right')
 
                 elif xdist == -2:
-                    directions['left'] = 0
+                    moves.remove('left')
 
                 elif ydist == 2:
-                    directions['down'] = 0
+                    moves.remove('down')
 
                 else:
-                    directions['up'] = 0
+                    moves.remove('up')
 
-    if 1 not in directions and headScare:
-        directions = directions2
+        if moves == []:
+            moves = prevMoves
+        return moves
 
-    moves = [k for k in directions.keys() if directions[k] is 1]
-
-    return moves
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
