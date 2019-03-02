@@ -191,8 +191,12 @@ def move(data=None):
 
             # There is no choice
             else:
-                move = eat_tail(you['head'], snakes)
-                debug_print("Eat Tail:      ", move)
+                moves = eat_tail(you['head'], snakes)
+                debug_print("Eat Tail:      ", moves)
+                moves = dont_get_eaten(sameSize=False)
+                if moves != []:
+                    move = move[0]
+                
                 if move == None:
                     moves = ['left', 'right', 'up', 'down']
                     moves = dont_hit_wall(moves, you['head'], walls)
@@ -276,20 +280,22 @@ def get_previous_move(head, second):
 
 
 def eat_tail(head, snakes):
+    moves = []
     for s in snakes:
         xdist = head[0] - s['tail'][0]
         ydist = head[1] - s['tail'][1]
         if abs(xdist) == 1 and ydist == 0:
             if xdist > 0:
-                return 'left'
+                moves.append['left']
             else:
-                return 'right'
+                moves.append['right']
 
         if abs(ydist) == 1 and xdist == 0:
             if ydist > 0:
-                return 'up'
+                moves.append['up']
             else:
-                return 'down'
+                moves.append['down']
+    return moves
 
 
 def go_straight(moves, head, body):
