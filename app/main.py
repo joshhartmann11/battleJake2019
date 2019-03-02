@@ -75,13 +75,19 @@ def move(data=None):
         # Moving restrictions
         if mySize > 3:
             moves = dont_hit_wall(moves, head, walls)
+            debug_print("Don't hit wall:", moves)
             moves = dont_hit_snakes(moves, head, snakes, [body[-1]])
+            debug_print("Don't hit snak:", moves)
             moves = dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes)
+            debug_print("Don't get eat :", moves)
         else:
             moves = dont_hit_wall(moves, head, walls)
+            debug_print("Don't hit wall:", moves)
             moves = dont_hit_snakes(moves, head, snakes, [])
+            debug_print("Don't hit snak:", moves)
             moves = dont_get_eaten(moves, head, mySize, snakeHeads, snakeSizes)
-        debug_print("Restrictions:  ", moves)
+            debug_print("Don't get eat :", moves)
+    
 
         # Don't choose nothing that'll kill you next time
         if len(moves) > 1:
