@@ -115,8 +115,8 @@ def move(data=None):
                 print("FutureMove: ", m)
                 nextHead = get_space(head, m)
                 nextMoves = ['left', 'right', 'up', 'down']
-                nextMoves = dont_hit_wall(nextMoves, you['head'], walls)
-                nextMoves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
+                nextMoves = dont_hit_wall(nextMoves, nextHead, walls)
+                nextMoves = dont_hit_snakes(moves, nextHead, snakesTogether + [you['head']], [])
                 print("MovesFromIt: ", nextMoves)
                 if nextMoves == []:
                     tmpMoves.remove(m)
