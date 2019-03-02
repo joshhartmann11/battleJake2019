@@ -43,8 +43,8 @@ def start():
 def move(data=None):
     if not data:
         data = bottle.request.json
-    print('-''*50)
-    print('-''*50)
+    print('-'*50)
+    print('-'*50)
     # Get all the data
     you = data['you']
     health = you["health"]
