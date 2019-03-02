@@ -167,6 +167,10 @@ def move(data=None):
 
         # Make a random choice for a move
         if have_choice(move, moves):
+            moves = flee_heads(moves, snakes, you['head'])
+            debug_print("Flee Choice:  ", move)
+
+        if have_choice(move, moves):
             move = random.choice(moves)
             debug_print("Random Choice:", move)
 
@@ -182,7 +186,7 @@ def move(data=None):
             else:
                 moves = eat_tail(you['head'], snakes)
                 debug_print("Eat Tail:      ", moves)
-                moves = dont_get_eaten(sameSize=False)
+                moves = dont_get_eaten(moves, you, snakes, sameSize=False)
                 if moves != []:
                     move = move[0]
 
