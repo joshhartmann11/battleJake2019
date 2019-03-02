@@ -18,13 +18,20 @@ FOOD_MAX = 10
 ate_food_last_turn = False;
 
 @bottle.route('/')
-def static():
-
-	return "the server is running"
+def index():
+	return "<h1>BattleJake</h1>"
 
 @bottle.route('/static/<path:path>')
 def static(path):
 	return bottle.static_file(path, root='static/')
+
+@bottle.route('/ping')
+def ping():
+    return {}
+
+@bottle.route('end')
+def end():
+    return {}
 
 @bottle.post('/start')
 def start():
