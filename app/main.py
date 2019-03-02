@@ -112,10 +112,12 @@ def move(data=None):
         if len(moves) > 1:
             tmpMoves = list(moves)
             for m in moves:
+                print("FutureMove: ", m)
                 nextHead = get_space(head, m)
                 nextMoves = ['left', 'right', 'up', 'down']
                 nextMoves = dont_hit_wall(nextMoves, you['head'], walls)
                 nextMoves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
+                print("MovesFromIt: ", nextMoves)
                 if nextMoves == []:
                     tmpMoves.remove(m)
             if tmpMoves != []:
@@ -303,6 +305,8 @@ def flee_heads(moves, snakes, head, dist=999):
     headManhattan = [ abs(s['head'][0]-head[0]) + abs(s['head'][1]-head[1]) for s in snakes]
     closestSnakes = sorted( [(x,i) for (i,x) in enumerate(headManhattan)] )
 
+    tmpMoves = list(moves)
+
     for s in closestSnakes:
         snake = snakes[s[1]]
         xdist = head[0] - snake['body'][0][0]
@@ -325,6 +329,9 @@ def flee_heads(moves, snakes, head, dist=999):
                 moves.remove('up')
         else:
             return moves
+
+    if moves == []:
+        moves = tmpMoves
     return moves
 
 
