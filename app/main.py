@@ -54,7 +54,7 @@ def move(data=None):
     snakesTogether = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
     heads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
     tails = [ (b['body'][-1]['x'], b['body'][-1]['y']) for b in data['board']['snakes'] ]
-    size = [ len(s['body']) for s in data['board']['snakes'] ]
+    size =  [ len(s['body']) for s in data['board']['snakes'] ]
     snakes = []
     [ snakes.extend(s) for s in snakesTogether ]
 
@@ -121,9 +121,9 @@ def move(data=None):
             moves = flee_others(moves, [body[0], body[-1]], snakes, head, 1)
             debug_print("Flee Others:   ", moves)
 
-        
+
         if mySize < 6:
-            # Move away from the heads of others 
+            # Move away from the heads of others
             if have_choice(move, moves):
                 move = flee_heads(moves, heads, head)
                 debug_print("Flee Heads:    ", move)
@@ -139,7 +139,7 @@ def move(data=None):
                 move = go_straight(moves, head, body)
                 debug_print("Go Straight:   ", move)
 
-            # Move away from the heads of others 
+            # Move away from the heads of others
             if have_choice(move, moves):
                 move = flee_heads(moves, heads, head)
                 debug_print("Flee Heads:    ", move)
