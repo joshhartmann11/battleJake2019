@@ -182,7 +182,7 @@ def move(data=None):
                 debug_print("Eat Tail:      ", move)
                 if move == None:
                     moves = ['left', 'right', 'up', 'down']
-                    moves.dont_hit_wall(moves, head, walls)
+                    moves = dont_hit_wall(moves, head, walls)
                     debug_print("Don't hit wall:", moves)
                     moves.dont_hit_snakes(moves, head, snakes)
                     debug_print("Don't hit snac:", moves)
