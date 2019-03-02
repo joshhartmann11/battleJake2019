@@ -54,7 +54,7 @@ def move(data=None):
     walls = (data['board']['width'], data['board']['height'])
 
     snakesTogether = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
-    heads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
+    snakeHeads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
     tails = [ (b['body'][-1]['x'], b['body'][-1]['y']) for b in data['board']['snakes'] ]
     size =  [ len(s['body']) for s in data['board']['snakes'] ]
     snakes = []
@@ -111,7 +111,7 @@ def move(data=None):
 
         # Take killing others as preference
         if have_choice(move, moves):
-            moves = kill_others(moves, head, mySize, heads, size)
+            moves = kill_others(moves, head, mySize, snakeHeads, size)
             debug_print("Kill Others:   ", moves)
 
         # Flee from a wall as preference
@@ -128,7 +128,7 @@ def move(data=None):
         if mySize < 6:
             # Move away from the heads of others
             if have_choice(move, moves):
-                move = flee_heads(moves, heads, head)
+                move = flee_heads(moves, snakeHeads, head)
                 debug_print("Flee Heads:    ", move)
 
             # Go straight as preference
@@ -144,7 +144,7 @@ def move(data=None):
 
             # Move away from the heads of others
             if have_choice(move, moves):
-                move = flee_heads(moves, heads, head)
+                move = flee_heads(moves, snakeHeads, head)
                 debug_print("Flee Heads:    ", move)
 
         # Make a random choice for a move
