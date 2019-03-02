@@ -463,30 +463,30 @@ def dont_get_eaten(moves, head, mySize, snakes):
 
             if abs(xdist) == 1 and abs(ydist) == 1:
 
-                if xdist > 0 and 'right' not in moves:
+                if xdist > 0 and 'right' in moves:
                     moves.remove('right')
 
-                elif xdist < 0 and 'left' not in moves:
+                elif xdist < 0 and 'left' in moves:
                     moves.remove('left')
 
-                if ydist > 0 and 'down' not in moves:
+                if ydist > 0 and 'down' in moves:
                     moves.remove('down')
 
-                elif ydist < 0 and 'up' not in moves:
+                elif ydist < 0 and 'up' in moves:
                     moves.remove('up')
 
             elif (abs(xdist) == 2 and ydist == 0) ^ (abs(ydist) == 2 and xdist == 0):
 
-                if xdist == 2:
+                if xdist == 2 and 'right' in moves:
                     moves.remove('right')
 
-                elif xdist == -2:
+                elif xdist == -2 and 'left' in moves:
                     moves.remove('left')
 
-                elif ydist == 2:
+                elif ydist == 2 and 'down' in moves:
                     moves.remove('down')
 
-                else:
+                elif ydist == -2 and 'up' in moves:
                     moves.remove('up')
 
         if moves == []:
