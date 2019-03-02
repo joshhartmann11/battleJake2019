@@ -267,13 +267,12 @@ def go_straight(moves, head, body):
 
 def flee_heads(moves, snakes, head):
     minManhattan = 999
-    heads.remove(head)
     for s in snakes:
         xdist = s['head'][0]-head[0]
         ydist = s['head'][1]-head[1]
 
         manhattan = abs(xdist) + abs(ydist)
-        if manhattan < minManhattan:
+        if manhattan < minManhattan and manhattan != 0:
             minManhattan = manhattan
             if (abs(xdist) < abs(ydist)):
                 if ('left' in moves) and (xdist > 0):
@@ -289,11 +288,11 @@ def flee_heads(moves, snakes, head):
                     return 'up'
 
 
-def flee_others(moves, delMoves, snakes, head, dist):
+def flee_others(moves, delMoves, snakesTogether, head, dist):
 
     prevMoves = list(moves)
     validMoves = list(moves)
-    for s in snakes:
+    for s in snakesTogether:
         if s not in delMoves:
             for m in moves:
                 fh = get_space(head, m)
