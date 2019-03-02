@@ -312,6 +312,7 @@ def flee_heads(moves, snakes, head, dist=999):
                 moves.remove('up')
         else:
             return moves
+    return moves
 
 
 def flee_others(moves, delMoves, snakesTogether, head, dist):
