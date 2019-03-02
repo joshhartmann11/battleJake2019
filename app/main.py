@@ -56,7 +56,7 @@ def move(data=None):
     snakesTogether = [ list(set([ ( b['x'], b['y'] ) for b in s['body'] ])) for s in data['board']['snakes'] ]
     snakeHeads = [ (b['body'][0]['x'], b['body'][0]['y']) for b in data['board']['snakes'] ]
     tails = [ (b['body'][-1]['x'], b['body'][-1]['y']) for b in data['board']['snakes'] ]
-    size =  [ len(s['body']) for s in data['board']['snakes'] ]
+    snakeSizes =  [ len(s['body']) for s in data['board']['snakes'] ]
     snakes = []
     [ snakes.extend(s) for s in snakesTogether ]
 
@@ -111,7 +111,7 @@ def move(data=None):
 
         # Take killing others as preference
         if have_choice(move, moves):
-            moves = kill_others(moves, head, mySize, snakeHeads, size)
+            moves = kill_others(moves, head, mySize, snakeHeads, snakeSizes)
             debug_print("Kill Others:   ", moves)
 
         # Flee from a wall as preference
