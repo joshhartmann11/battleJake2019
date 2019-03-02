@@ -165,10 +165,10 @@ def move(data=None):
             move = go_straight(moves, you['head'], you['body'])
             debug_print("Go Straight:   ", move)
 
-        # Make a random choice for a move
+        # Flee heads
         if have_choice(move, moves):
             moves = flee_heads(moves, snakes, you['head'])
-            debug_print("Flee Choice:  ", move)
+            debug_print("Flee Choice:  ", moves)
 
         if have_choice(move, moves):
             move = random.choice(moves)
