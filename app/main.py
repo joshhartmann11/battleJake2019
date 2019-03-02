@@ -201,6 +201,7 @@ def move(data=None):
                     moves = dont_hit_wall(moves, you['head'], walls)
                     debug_print("Don't hit wall:", moves)
                     moves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
+                    moves = dont_get_eaten(moves, you, snakes, sameSize=False)
                     debug_print("Don't hit snac:", moves)
                     if moves == []:
                         move = 'up'
@@ -535,12 +536,13 @@ def dont_hit_snakes(moves, head, snakesTogether, ignore):
     return moves
 
 
-def dont_get_eaten(moves, you, snakes):
+def dont_get_eaten(moves, you, snakes, sameSize=True):
 
     prevMoves = list(moves)
 
     for s in snakes:
-        if (s['size'] >= you['size']):
+        if (s['size'] >= you['size']) and sameSize or \
+           (s['size'] > you['size']) and not sameSize:
             xdist = s['head'][0]-you['head'][0]
             ydist = s['head'][1]-you['head'][1]
 
