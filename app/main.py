@@ -25,11 +25,11 @@ def index():
 def static(path):
 	return bottle.static_file(path, root='static/')
 
-@bottle.route('/ping')
+@bottle.post('/ping')
 def ping():
     return {}
 
-@bottle.route('end')
+@bottle.post('/end')
 def end():
     return {}
 
