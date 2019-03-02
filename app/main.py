@@ -101,6 +101,7 @@ def move(data=None):
         if mySize < 6:
             health = health/2
 
+
         if have_choice(move, moves) and (health < HUNGRY):
             maxFood = round( (1 - ((health-STARVING) / (HUNGRY-STARVING))) * (FOOD_MAX-FOOD_MIN) )
 
