@@ -456,6 +456,9 @@ def dont_get_eaten(moves, head, mySize, snakes):
 
     prevMoves = list(moves)
 
+    print("Don't get eat snake heads: ", [s['head'] for s in snakes])
+    print("Don't get eat my head:     ", head)
+
     for s in snakes:
         if (s['size'] >= mySize):
             print("SCARRY SNAC")
