@@ -15,6 +15,8 @@ STARVING = 15
 # Max searching radius
 FOOD_MAX = 10
 
+ate_food_last_turn = False;
+
 @bottle.route('/')
 def static():
 
@@ -77,17 +79,19 @@ def move(data=None):
 
 
         # Moving restrictions
-        if mySize > 3:
+        if ate_food_last_turn:
+            print("atefood")
             moves = dont_hit_wall(moves, head, walls)
             debug_print("Don't hit wall:", moves)
-            moves = dont_hit_snakes(moves, head, snakesTogether, [body[-1]])
+            moves = dont_hit_snakes(moves, head, snakesTogether, [])
             debug_print("Don't hit snak:", moves)
             moves = dont_get_eaten(moves, head, mySize, snakes)
             debug_print("Don't get eat :", moves)
         else:
+            print("notatefood")
             moves = dont_hit_wall(moves, head, walls)
             debug_print("Don't hit wall:", moves)
-            moves = dont_hit_snakes(moves, head, snakesTogether, [])
+            moves = dont_hit_snakes(moves, head, snakesTogether, [body[-1]])
             debug_print("Don't hit snak:", moves)
             moves = dont_get_eaten(moves, head, mySize, snakes)
             debug_print("Don't get eat :", moves)
@@ -190,6 +194,12 @@ def move(data=None):
             debug_print("ERROR: Random choice")
 
     debug_print("MOVE: ", move)
+
+    if ate_food(head, food, move):
+        ate_food_last_turn = True
+    else:
+        ate_food_last_turn = False
+    print("Ate Food: ", ate_food_last_turn)
 
     return {
         'move': move,
@@ -494,10 +504,7 @@ def dont_get_eaten(moves, head, mySize, snakes):
 
                 elif ydist == -2 and 'up' in moves:
                     moves.remove('up')
-
-        if moves == []:
-            moves = prevMoves
-            print("YAYAYAYAYA")
+                    
         return moves
 
 
