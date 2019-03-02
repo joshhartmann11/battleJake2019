@@ -15,6 +15,8 @@ STARVING = 15
 # Max searching radius
 FOOD_MAX = 10
 
+SIZE_FOOD_THRESHOLD = 0
+
 ate_food_last_turn = False;
 
 @bottle.route('/')
@@ -154,7 +156,7 @@ def move(data=None):
             debug_print("Kill Others:   ", moves)
 
 
-        if you["size"] < 6:
+        if you["size"] < SIZE_FOOD_THRESHOLD:
             # Move away from the heads of others
             if have_choice(move, moves):
                 moves = flee_heads(moves, snakes, you['head'])
@@ -196,7 +198,7 @@ def move(data=None):
                 moves = dont_get_eaten(sameSize=False)
                 if moves != []:
                     move = move[0]
-                
+
                 if move == None:
                     moves = ['left', 'right', 'up', 'down']
                     moves = dont_hit_wall(moves, you['head'], walls)
