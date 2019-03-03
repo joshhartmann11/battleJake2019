@@ -11,7 +11,7 @@ HUNGRY = 60
 # Starting search radius
 FOOD_MIN = 1
 # When we start searching our max radius
-STARVING = 15
+STARVING = 30
 # Max searching radius
 FOOD_MAX = 10
 
