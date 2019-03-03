@@ -55,9 +55,9 @@ def move(data=None):
     global ate_food_last_turn
     if not data:
         data = bottle.request.json
-    print('-'*50)
-    print('-'*50)
-    print(data["board"]["snakes"])
+    debug_print('-'*50)
+    debug_print('-'*50)
+    debug_print(data["board"]["snakes"])
     # Get all the data
     you = data['you']
     you['body'] = [ (b['x'], b['y']) for b in you['body'] ]
@@ -89,7 +89,6 @@ def move(data=None):
 
         # Moving restrictions
         if ate_food_last_turn:
-            print("atefood")
             moves = dont_hit_wall(moves, you['head'], walls)
             debug_print("Don't hit wall:", moves)
             moves = dont_hit_snakes(moves, you['head'], snakesTogether, [])
@@ -97,7 +96,6 @@ def move(data=None):
             moves = dont_get_eaten(moves, you, snakes)
             debug_print("Don't get eat :", moves)
         else:
-            print("notatefood")
             moves = dont_hit_wall(moves, you['head'], walls)
             debug_print("Don't hit wall:", moves)
             moves = dont_hit_snakes(moves, you['head'], snakesTogether, [you['body'][-1]])
@@ -109,14 +107,11 @@ def move(data=None):
         # Don't choose nothing that'll kill you next time
         if len(moves) > 1:
             tmpMoves = list(moves)
-            print(moves)
             for m in moves:
-                print("FutureMove: ", m)
                 nextHead = get_space(you['head'], m)
                 nextMoves = ['left', 'right', 'up', 'down']
                 nextMoves = dont_hit_wall(nextMoves, nextHead, walls)
                 nextMoves = dont_hit_snakes(nextMoves, nextHead, snakesTogether + [you['head']], [])
-                print("MovesFromIt: ", nextMoves)
                 if nextMoves == []:
                     tmpMoves.remove(m)
             if tmpMoves != []:
@@ -220,7 +215,6 @@ def move(data=None):
         ate_food_last_turn = True
     else:
         ate_food_last_turn = False
-    print("Ate Food: ", ate_food_last_turn)
 
     return {
         'move': move,
