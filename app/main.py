@@ -78,7 +78,7 @@ def move(data=None):
     food = [(f['x'], f['y']) for f in data['board']['food']]
     numFood = len(food)
 
-    debug_print("Move Number:")
+    debug_print("Move Number: ", data['turn'])
     debug_print("My Size:    ", you['size'])
     debug_print("My Health:  ", you['health'])
 
