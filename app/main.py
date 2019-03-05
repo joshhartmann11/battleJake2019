@@ -4,7 +4,7 @@ import time
 import bottle
 import traceback
 
-DEBUG = False
+DEBUG = True
 
 # The higher the quicker we start searching for food
 HUNGRY = 60
