@@ -7,13 +7,13 @@ import traceback
 DEBUG = True
 
 # The higher the quicker we start searching for food
-HUNGRY = 50
+HUNGRY = 60
 # Starting search radius
 FOOD_MIN = 1
 # When we start searching our max radius
-STARVING = 20
+STARVING = 30
 # Max searching radius
-FOOD_MAX = 11
+FOOD_MAX = 10
 
 SIZE_THRESHOLD = 0
 
